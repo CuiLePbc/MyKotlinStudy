@@ -13,7 +13,7 @@ class ToutiaoListAdapter(val items: TouTiaoInfo?) : RecyclerView.Adapter<Toutiao
         return ViewHolder(TextView(parent.context))
     }
 
-    override fun getItemCount(): Int = items?.result?.data?.size?:0
+    override fun getItemCount(): Int = items?.result?.data?.size ?: 0
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (items != null && itemCount > 0)

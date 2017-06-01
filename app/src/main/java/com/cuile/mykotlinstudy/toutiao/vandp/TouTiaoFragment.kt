@@ -4,12 +4,18 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfo
+import com.cuile.mykotlinstudy.toutiao.vandp.adapter.ToutiaoListAdapter
+import org.jetbrains.anko.find
+import org.jetbrains.anko.longToast
 
 /**
  * A simple [Fragment] subclass.
@@ -23,6 +29,19 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View{
 
     var toutiaoPresenter: TouTiaoContract.Presenter? = null
 
+    init {
+        toutiaoPresenter = TouTiaoPresenter(this)
+    }
+
+
+    lateinit var toutiaoAdapter: ToutiaoListAdapter
+    lateinit var toutiaoRecyclerView: RecyclerView
+    lateinit var toutiaoSwipRefreshLayout: SwipeRefreshLayout
+
+
+    override fun refreshFailed() {
+        activity.longToast("加载数据失败")
+    }
     /**
      * 绑定presenter
      */
@@ -34,21 +53,22 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View{
      * 刷新列表
      */
     override fun refreshList(datas: TouTiaoInfo) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        toutiaoAdapter = ToutiaoListAdapter(datas)
+        toutiaoRecyclerView.refreshDrawableState()
     }
 
     /**
      * 显示进度条
      */
     override fun showLoadingBar() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        toutiaoSwipRefreshLayout.post { toutiaoSwipRefreshLayout.isRefreshing = true }
     }
 
     /**
      * 隐藏进度条
      */
     override fun hideLoadingBar() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        toutiaoSwipRefreshLayout.post { toutiaoSwipRefreshLayout.isRefreshing = false }
     }
 
     /**
@@ -74,9 +94,21 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View{
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-
         return inflater!!.inflate(R.layout.fragment_tou_tiao, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        toutiaoRecyclerView = view.find<RecyclerView>(R.id.toutiao_list)
+        toutiaoSwipRefreshLayout = view.find<SwipeRefreshLayout>(R.id.toutiao_swip_refresh)
+
+        toutiaoAdapter = ToutiaoListAdapter(null)
+        toutiaoRecyclerView.layoutManager = LinearLayoutManager(activity)
+        toutiaoRecyclerView.adapter = toutiaoAdapter
+
+        toutiaoSwipRefreshLayout.setOnRefreshListener { toutiaoPresenter?.requestDatas("top") }
+        toutiaoSwipRefreshLayout.post { toutiaoSwipRefreshLayout.isRefreshing = true }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

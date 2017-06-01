@@ -13,6 +13,7 @@ interface TouTiaoContract {
         fun showLoadingBar()
         fun hideLoadingBar()
         fun isActive(): Boolean
+        fun refreshFailed()
 
     }
     interface Presenter : BasePresenter {
