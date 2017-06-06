@@ -5,8 +5,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log.i
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,9 +55,11 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View{
      * 刷新列表
      */
     override fun refreshList(datas: TouTiaoInfo) {
-        toutiaoAdapter = ToutiaoListAdapter(datas)
-        toutiaoRecyclerView.refreshDrawableState()
+        toutiaoAdapter.items.clear()
+        toutiaoAdapter.items.addAll(datas.result.data)
+        toutiaoAdapter.notifyDataSetChanged()
     }
+
 
     /**
      * 显示进度条
@@ -103,12 +107,12 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View{
         toutiaoRecyclerView = view.find<RecyclerView>(R.id.toutiao_list)
         toutiaoSwipRefreshLayout = view.find<SwipeRefreshLayout>(R.id.toutiao_swip_refresh)
 
-        toutiaoAdapter = ToutiaoListAdapter(null)
+        toutiaoAdapter = ToutiaoListAdapter()
         toutiaoRecyclerView.layoutManager = LinearLayoutManager(activity)
         toutiaoRecyclerView.adapter = toutiaoAdapter
 
         toutiaoSwipRefreshLayout.setOnRefreshListener { toutiaoPresenter?.requestDatas("top") }
-        toutiaoSwipRefreshLayout.post { toutiaoSwipRefreshLayout.isRefreshing = true }
+        toutiaoPresenter?.requestDatas("top")
     }
 
     // TODO: Rename method, update argument and hook method into UI event

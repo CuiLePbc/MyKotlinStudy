@@ -19,8 +19,8 @@ class TouTiaoRequest(val typeStr: String, val touTiaoCallBack: TouTiaoCallBack) 
         async {
             val toutiaoJsonStr = URL(COMPLETE_URL).readText()
             val toutiaoInfo = Gson().fromJson<TouTiaoInfo>(toutiaoJsonStr, TouTiaoInfo::class.java)
-            i("request ", toutiaoInfo.result.data.size.toString() + "ge")
-            if (toutiaoInfo.error_code != 0) {
+            i("request ", toutiaoInfo.result.data.size.toString() + " news error_code is " + toutiaoInfo.error_code)
+            if (toutiaoInfo.error_code == 0) {
                 touTiaoCallBack.requestSuccess(toutiaoInfo)
             } else {
                 touTiaoCallBack.requestFailed()

@@ -9,15 +9,14 @@ import com.cuile.mykotlinstudy.toutiao.data.TouTiaoRequest
  */
 class TouTiaoPresenter(val toutiaoView: TouTiaoContract.View) : TouTiaoContract.Presenter, TouTiaoRequest.TouTiaoCallBack {
     override fun requestSuccess(touTiaoInfo: TouTiaoInfo) {
-        i("refresh result", touTiaoInfo.reason)
-        toutiaoView.refreshList(touTiaoInfo)
         toutiaoView.hideLoadingBar()
+        toutiaoView.refreshList(touTiaoInfo)
+
     }
 
     override fun requestFailed() {
-        i("refresh result", "failed!!!")
-        toutiaoView.refreshFailed()
         toutiaoView.hideLoadingBar()
+        toutiaoView.refreshFailed()
     }
 
     init {
