@@ -15,9 +15,12 @@ import android.view.ViewGroup
 
 import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfo
+import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfoResultData
 import com.cuile.mykotlinstudy.toutiao.vandp.adapter.ToutiaoListAdapter
 import org.jetbrains.anko.find
 import org.jetbrains.anko.longToast
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass.
@@ -27,7 +30,7 @@ import org.jetbrains.anko.longToast
  * Use the [TouTiaoFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TouTiaoFragment : Fragment(), TouTiaoContract.View{
+class TouTiaoFragment : Fragment(), TouTiaoContract.View, ToutiaoListAdapter.OnItemClickListener {
 
     var toutiaoPresenter: TouTiaoContract.Presenter? = null
 
@@ -35,8 +38,7 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View{
         toutiaoPresenter = TouTiaoPresenter(this)
     }
 
-
-    lateinit var toutiaoAdapter: ToutiaoListAdapter
+    var toutiaoAdapter = ToutiaoListAdapter(mutableListOf())
     lateinit var toutiaoRecyclerView: RecyclerView
     lateinit var toutiaoSwipRefreshLayout: SwipeRefreshLayout
 
@@ -44,6 +46,7 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View{
     override fun refreshFailed() {
         activity.longToast("加载数据失败")
     }
+
     /**
      * 绑定presenter
      */
@@ -107,7 +110,6 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View{
         toutiaoRecyclerView = view.find<RecyclerView>(R.id.toutiao_list)
         toutiaoSwipRefreshLayout = view.find<SwipeRefreshLayout>(R.id.toutiao_swip_refresh)
 
-        toutiaoAdapter = ToutiaoListAdapter()
         toutiaoRecyclerView.layoutManager = LinearLayoutManager(activity)
         toutiaoRecyclerView.adapter = toutiaoAdapter
 
