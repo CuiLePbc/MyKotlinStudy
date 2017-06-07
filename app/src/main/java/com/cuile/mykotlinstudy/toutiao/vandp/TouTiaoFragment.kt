@@ -5,22 +5,17 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log.i
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfo
-import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfoResultData
 import com.cuile.mykotlinstudy.toutiao.vandp.adapter.ToutiaoListAdapter
 import org.jetbrains.anko.find
 import org.jetbrains.anko.longToast
-import java.util.*
-import kotlin.collections.ArrayList
+import org.jetbrains.anko.toast
 
 /**
  * A simple [Fragment] subclass.
@@ -30,7 +25,7 @@ import kotlin.collections.ArrayList
  * Use the [TouTiaoFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TouTiaoFragment : Fragment(), TouTiaoContract.View, ToutiaoListAdapter.OnItemClickListener {
+class TouTiaoFragment : Fragment(), TouTiaoContract.View {
 
     var toutiaoPresenter: TouTiaoContract.Presenter? = null
 
@@ -38,7 +33,7 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View, ToutiaoListAdapter.OnI
         toutiaoPresenter = TouTiaoPresenter(this)
     }
 
-    var toutiaoAdapter = ToutiaoListAdapter(mutableListOf())
+    lateinit var toutiaoAdapter: ToutiaoListAdapter
     lateinit var toutiaoRecyclerView: RecyclerView
     lateinit var toutiaoSwipRefreshLayout: SwipeRefreshLayout
 
@@ -109,6 +104,8 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View, ToutiaoListAdapter.OnI
 
         toutiaoRecyclerView = view.find<RecyclerView>(R.id.toutiao_list)
         toutiaoSwipRefreshLayout = view.find<SwipeRefreshLayout>(R.id.toutiao_swip_refresh)
+
+        toutiaoAdapter = ToutiaoListAdapter(mutableListOf()){ context.toast(it.title) }
 
         toutiaoRecyclerView.layoutManager = LinearLayoutManager(activity)
         toutiaoRecyclerView.adapter = toutiaoAdapter

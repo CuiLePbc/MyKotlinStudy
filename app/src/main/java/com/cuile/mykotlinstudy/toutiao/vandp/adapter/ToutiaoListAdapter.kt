@@ -14,7 +14,8 @@ import org.jetbrains.anko.find
 /**
  * Created by 崔乐 on 2017/5/22.
  */
-class ToutiaoListAdapter(var items: MutableList<TouTiaoInfoResultData> = mutableListOf<TouTiaoInfoResultData>(), val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<ToutiaoListAdapter.ViewHolder>() {
+class ToutiaoListAdapter(var items: MutableList<TouTiaoInfoResultData> = mutableListOf<TouTiaoInfoResultData>(),
+                         val itemClickListener: (TouTiaoInfoResultData) -> Unit) : RecyclerView.Adapter<ToutiaoListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_toutiao_list, null)
         return ViewHolder(view, itemClickListener)
@@ -25,10 +26,8 @@ class ToutiaoListAdapter(var items: MutableList<TouTiaoInfoResultData> = mutable
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindView(items[position])
     }
-    public interface OnItemClickListener {
-        operator fun invoke(touTiaoInfoResultData: TouTiaoInfoResultData)
-    }
-    class ViewHolder(val view: View, val itemClickListener: OnItemClickListener) : RecyclerView.ViewHolder(view) {
+
+    class ViewHolder(val view: View, val itemClickListener: (TouTiaoInfoResultData) -> Unit) : RecyclerView.ViewHolder(view) {
 
         private val titleTV: TextView = view.find(R.id.toutiao_item_title)
         private val authorTV: TextView = view.find(R.id.toutiao_item_author)
