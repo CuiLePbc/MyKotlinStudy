@@ -1,6 +1,7 @@
 package com.cuile.mykotlinstudy.toutiao.vandp
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,9 +13,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfo
+import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfoResultData
 import com.cuile.mykotlinstudy.toutiao.vandp.adapter.ToutiaoListAdapter
 import org.jetbrains.anko.find
 import org.jetbrains.anko.longToast
+import kotlin.jvm.javaClass
 import org.jetbrains.anko.toast
 
 /**
@@ -54,8 +57,11 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
      */
     override fun refreshList(datas: TouTiaoInfo) {
         toutiaoAdapter.items.clear()
+        toutiaoAdapter.notifyDataSetChanged()
         toutiaoAdapter.items.addAll(datas.result.data)
         toutiaoAdapter.notifyDataSetChanged()
+
+
     }
 
 
@@ -105,19 +111,20 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
         toutiaoRecyclerView = view.find<RecyclerView>(R.id.toutiao_list)
         toutiaoSwipRefreshLayout = view.find<SwipeRefreshLayout>(R.id.toutiao_swip_refresh)
 
-        toutiaoAdapter = ToutiaoListAdapter(mutableListOf()){ context.toast(it.title) }
+        toutiaoAdapter = ToutiaoListAdapter(mutableListOf()){ onItemClicked(it) }
 
         toutiaoRecyclerView.layoutManager = LinearLayoutManager(activity)
         toutiaoRecyclerView.adapter = toutiaoAdapter
 
         toutiaoSwipRefreshLayout.setOnRefreshListener { toutiaoPresenter?.requestDatas("top") }
         toutiaoPresenter?.requestDatas("top")
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
+    fun onItemClicked(touTiaoInfoResultData: TouTiaoInfoResultData) {
         if (mListener != null) {
-            mListener!!.onFragmentInteraction(uri)
+            mListener!!.onFragmentInteraction(touTiaoInfoResultData)
         }
     }
 
@@ -145,8 +152,7 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
      * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
      */
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
+        fun onFragmentInteraction(touTiaoInfoResultData: TouTiaoInfoResultData)
     }
 
     companion object {

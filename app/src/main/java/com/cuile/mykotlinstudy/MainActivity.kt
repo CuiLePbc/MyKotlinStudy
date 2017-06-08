@@ -1,24 +1,25 @@
 package com.cuile.mykotlinstudy
 
-import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfoResultData
+import com.cuile.mykotlinstudy.toutiao.vandp.TouTiaoDetailActivity
 import com.cuile.mykotlinstudy.toutiao.vandp.TouTiaoFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import org.jetbrains.anko.startActivity
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, TouTiaoFragment.OnFragmentInteractionListener{
 
-    override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onFragmentInteraction(touTiaoInfoResultData: TouTiaoInfoResultData) {
+        startActivity<TouTiaoDetailActivity>(TouTiaoDetailActivity.TOUTIAO_ITEM_URL to touTiaoInfoResultData.url)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,13 +83,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_toutiao -> {
-                // Handle the camera action
+                toolbar.title = getString(R.string.toutiao)
             }
             R.id.nav_wechat -> {
-
+                toolbar.title = getString(R.string.wechat)
             }
             R.id.nav_smile -> {
-
+                toolbar.title = getString(R.string.smile)
             }
             R.id.nav_share -> {
 
