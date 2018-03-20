@@ -6,13 +6,14 @@ import org.jetbrains.anko.async
 import java.net.URL
 
 /**
- * Created by 崔乐 on 2017/5/22.
- */
-class TouTiaoRequest(val typeStr: String, val touTiaoCallBack: TouTiaoCallBack) {
+* Created by 崔乐 on 2017/5/22.
+*
+*/
+class TouTiaoRequest(val typeStr: String, private val touTiaoCallBack: TouTiaoCallBack) {
     companion object {
         private val APPKEY = "70fda4545cf31fafe43253ff0f5dd8f6"
         private val BASE_URL = "http://v.juhe.cn/toutiao/index"
-        private val COMPLETE_URL = "${BASE_URL}?key=${APPKEY}&type="
+        private val COMPLETE_URL = "$BASE_URL?key=$APPKEY&type="
     }
 
     fun run() {
