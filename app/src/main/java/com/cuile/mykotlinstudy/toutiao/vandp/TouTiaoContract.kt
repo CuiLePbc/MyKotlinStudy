@@ -10,8 +10,6 @@ import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfo
 interface TouTiaoContract {
     interface View : BaseView<Presenter> {
         fun refreshList(datas: TouTiaoInfo)
-        fun showLoadingBar()
-        fun hideLoadingBar()
         fun isActive(): Boolean
         fun refreshFailed()
 

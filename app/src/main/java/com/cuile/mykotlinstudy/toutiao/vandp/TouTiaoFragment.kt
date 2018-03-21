@@ -30,15 +30,15 @@ import org.jetbrains.anko.toast
  */
 class TouTiaoFragment : Fragment(), TouTiaoContract.View {
 
-    var toutiaoPresenter: TouTiaoContract.Presenter? = null
+    private var toutiaoPresenter: TouTiaoContract.Presenter? = null
 
     init {
         toutiaoPresenter = TouTiaoPresenter(this)
     }
 
-    lateinit var toutiaoAdapter: ToutiaoListAdapter
-    lateinit var toutiaoRecyclerView: RecyclerView
-    lateinit var toutiaoSwipRefreshLayout: SwipeRefreshLayout
+    private lateinit var toutiaoAdapter: ToutiaoListAdapter
+    private lateinit var toutiaoRecyclerView: RecyclerView
+    private lateinit var toutiaoSwipRefreshLayout: SwipeRefreshLayout
 
 
     override fun refreshFailed() {
@@ -82,9 +82,7 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
     /**
      * 当前view是否存活
      */
-    override fun isActive(): Boolean {
-        return isAdded
-    }
+    override fun isActive(): Boolean = isAdded
 
     // TODO: Rename and change types of parameters
     private var mParam1: String? = null
@@ -101,15 +99,14 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_tou_tiao, container, false)
-    }
+                              savedInstanceState: Bundle?): View? =
+            inflater!!.inflate(R.layout.fragment_tou_tiao, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toutiaoRecyclerView = view.find<RecyclerView>(R.id.toutiao_list)
-        toutiaoSwipRefreshLayout = view.find<SwipeRefreshLayout>(R.id.toutiao_swip_refresh)
+        toutiaoRecyclerView = view.find(R.id.toutiao_list)
+        toutiaoSwipRefreshLayout = view.find(R.id.toutiao_swip_refresh)
 
         toutiaoAdapter = ToutiaoListAdapter(mutableListOf()){ onItemClicked(it) }
 
@@ -122,7 +119,7 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    fun onItemClicked(touTiaoInfoResultData: TouTiaoInfoResultData) {
+    private fun onItemClicked(touTiaoInfoResultData: TouTiaoInfoResultData) {
         if (mListener != null) {
             mListener!!.onFragmentInteraction(touTiaoInfoResultData)
         }
@@ -131,7 +128,7 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
-            mListener = context as OnFragmentInteractionListener?
+            mListener = context
         } else {
             throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
         }

@@ -6,6 +6,7 @@ import android.os.Parcelable
 
 /**
  * Created by 崔乐 on 2017/5/25.
+ *
  */
 data class TouTiaoInfo(val result: TouTiaoInfoResult, val reason: String, val error_code: Int)
 

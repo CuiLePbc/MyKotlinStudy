@@ -5,4 +5,6 @@ package com.cuile.mykotlinstudy
  */
 interface BaseView<T> {
     fun setPresenter(presenter: T)
+    fun showLoadingBar()
+    fun hideLoadingBar()
 }
