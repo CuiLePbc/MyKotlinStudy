@@ -7,4 +7,5 @@ interface BaseView<T> {
     fun setPresenter(presenter: T)
     fun showLoadingBar()
     fun hideLoadingBar()
+    fun isActive(): Boolean
 }

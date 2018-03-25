@@ -1,5 +1,6 @@
 package com.cuile.mykotlinstudy
 
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -12,11 +13,13 @@ import android.view.MenuItem
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfoResultData
 import com.cuile.mykotlinstudy.toutiao.vandp.TouTiaoDetailActivity
 import com.cuile.mykotlinstudy.toutiao.vandp.TouTiaoFragment
+import com.cuile.mykotlinstudy.wechat.vandp.WeChatFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import org.jetbrains.anko.startActivity
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, TouTiaoFragment.OnFragmentInteractionListener{
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, TouTiaoFragment.OnFragmentInteractionListener, WeChatFragment.OnFragmentInteractionListener{
+
 
     override fun onFragmentInteraction(touTiaoInfoResultData: TouTiaoInfoResultData) {
         startActivity<TouTiaoDetailActivity>(TouTiaoDetailActivity.TOUTIAO_ITEM_URL to touTiaoInfoResultData.url)
@@ -45,13 +48,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // 侧滑菜单监听
         nav_view.setNavigationItemSelectedListener(this)
 
+        addToutiao()
 
+    }
+
+    fun addToutiao() {
+        title = getString(R.string.toutiao)
         // 初始化头条fragment
-        var toutiaoFragment = supportFragmentManager.findFragmentById(R.id.main_container)
+        var toutiaoFragment = supportFragmentManager.findFragmentByTag(getString(R.string.tag_toutiao_fragment))
         if (toutiaoFragment == null) {
             toutiaoFragment = TouTiaoFragment.newInstance()
-            supportFragmentManager.beginTransaction().add(R.id.main_container, toutiaoFragment).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.main_container, toutiaoFragment, getString(R.string.tag_toutiao_fragment)).commit()
         }
+
+    }
+
+    fun addWeChat() {
+        var weChatFragment = supportFragmentManager.findFragmentByTag(getString(R.string.tag_wechat_fragment))
+        if (weChatFragment == null) {
+            weChatFragment = WeChatFragment.newInstance()
+            supportFragmentManager.beginTransaction().replace(R.id.main_container, weChatFragment, getString(R.string.tag_wechat_fragment)).commit()
+        }
+        title = getString(R.string.wechat)
+    }
+
+    fun addYiKe() {
+        title = getString(R.string.smile)
     }
 
     override fun onBackPressed() {
@@ -83,13 +105,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_toutiao -> {
-                toolbar.title = getString(R.string.toutiao)
+                addToutiao()
             }
             R.id.nav_wechat -> {
-                toolbar.title = getString(R.string.wechat)
+                addWeChat()
             }
             R.id.nav_smile -> {
-                toolbar.title = getString(R.string.smile)
+                addYiKe()
             }
             R.id.nav_share -> {
 
@@ -103,5 +125,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onFragmentInteraction(uri: Uri) {
     }
 }

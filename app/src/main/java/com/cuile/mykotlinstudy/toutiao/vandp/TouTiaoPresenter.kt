@@ -6,11 +6,13 @@ import com.cuile.mykotlinstudy.toutiao.data.TouTiaoRequest
 
 /**
  * Created by 崔乐 on 2017/5/27.
+ *
  */
 class TouTiaoPresenter(val toutiaoView: TouTiaoContract.View) : TouTiaoContract.Presenter, TouTiaoRequest.TouTiaoCallBack {
     override fun requestSuccess(touTiaoInfo: TouTiaoInfo) {
-        toutiaoView.hideLoadingBar()
+
         toutiaoView.refreshList(touTiaoInfo)
+        toutiaoView.hideLoadingBar()
 
     }
 
