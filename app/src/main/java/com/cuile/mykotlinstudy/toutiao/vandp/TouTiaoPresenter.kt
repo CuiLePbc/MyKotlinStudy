@@ -1,17 +1,20 @@
 package com.cuile.mykotlinstudy.toutiao.vandp
 
-import android.util.Log.i
-import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfo
+import com.cuile.mykotlinstudy.DataInterface
+import com.cuile.mykotlinstudy.DataRequestCallBack
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoRequest
 
 /**
  * Created by 崔乐 on 2017/5/27.
  *
  */
-class TouTiaoPresenter(val toutiaoView: TouTiaoContract.View) : TouTiaoContract.Presenter, TouTiaoRequest.TouTiaoCallBack {
-    override fun requestSuccess(touTiaoInfo: TouTiaoInfo) {
+class TouTiaoPresenter(val toutiaoView: TouTiaoContract.View) : TouTiaoContract.Presenter, DataRequestCallBack {
+    override fun requestMoreSuccess(dataInfo: DataInterface) {
+        toutiaoView.addList(dataInfo)
+    }
 
-        toutiaoView.refreshList(touTiaoInfo)
+    override fun requestSuccess(dataInterface: DataInterface) {
+        toutiaoView.refreshList(dataInterface)
         toutiaoView.hideLoadingBar()
 
     }
@@ -26,12 +29,8 @@ class TouTiaoPresenter(val toutiaoView: TouTiaoContract.View) : TouTiaoContract.
         toutiaoView.setPresenter(this)
     }
 
-    override fun start() {
-
-    }
-
     override fun requestDatas(type: String) {
         toutiaoView.showLoadingBar()
-        TouTiaoRequest(type, this).run()
+        TouTiaoRequest(this).run(type, false)
     }
 }

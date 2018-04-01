@@ -14,7 +14,7 @@ import org.jetbrains.anko.find
 /**
  * Created by 崔乐 on 2017/5/22.
  */
-class ToutiaoListAdapter(var items: MutableList<TouTiaoInfoResultData> = mutableListOf<TouTiaoInfoResultData>(),
+class ToutiaoListAdapter(var items: MutableList<TouTiaoInfoResultData> = mutableListOf(),
                          val itemClickListener: (TouTiaoInfoResultData) -> Unit) : RecyclerView.Adapter<ToutiaoListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_toutiao_list, null)
@@ -44,7 +44,7 @@ class ToutiaoListAdapter(var items: MutableList<TouTiaoInfoResultData> = mutable
                         .placeholder(R.drawable.toutiao_default)
                         .error(R.drawable.toutiao_default)
                         .into(img)
-                itemView.setOnClickListener { itemClickListener(touTiaoInfoResultData) }
+                itemView.setOnClickListener { itemClickListener(this) }
             }
         }
     }

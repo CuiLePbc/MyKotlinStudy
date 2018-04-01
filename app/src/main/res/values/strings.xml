@@ -11,10 +11,11 @@
     <string name="wechat">微信精选</string>
     <string name="tag_wechat_fragment">wechatFragment</string>
     <string name="smile">轻松一刻</string>
-    <string name="tag_smile_fragment">smileFragment</string>
+    <string name="tag_yike_fragment">yikeFragment</string>
     <string name="setting">设置</string>
     <string name="shareapp">推荐给朋友</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

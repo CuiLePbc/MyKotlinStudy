@@ -9,11 +9,7 @@ import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfo
  *
  */
 interface TouTiaoContract {
-    interface View : BaseView<Presenter> {
-        fun refreshList(datas: TouTiaoInfo)
-        fun refreshFailed()
-
-    }
+    interface View : BaseView<Presenter>
     interface Presenter : BasePresenter {
         fun requestDatas(type: String)
     }

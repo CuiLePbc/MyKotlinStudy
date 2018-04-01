@@ -8,4 +8,8 @@ interface BaseView<T> {
     fun showLoadingBar()
     fun hideLoadingBar()
     fun isActive(): Boolean
+
+    fun refreshList(datas: DataInterface)
+    fun addList(datas: DataInterface)
+    fun refreshFailed()
 }

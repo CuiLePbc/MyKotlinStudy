@@ -4,18 +4,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.wechat.data.WeChatInfoResultData
-import com.squareup.picasso.Picasso
 import org.jetbrains.anko.find
 
 /**
  * Created by cuile on 2018/3/24.
  *
  */
-class WechatListAdapter(var items: MutableList<WeChatInfoResultData> = mutableListOf()) : RecyclerView.Adapter<WechatListAdapter.ViewHolder>() {
+class WechatListAdapter(var items: MutableList<WeChatInfoResultData> = mutableListOf(), private val itemClickListener: (WeChatInfoResultData) -> Unit) : RecyclerView.Adapter<WechatListAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = items.size
 
@@ -26,26 +24,20 @@ class WechatListAdapter(var items: MutableList<WeChatInfoResultData> = mutableLi
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_toutiao_list, null)
-        return ViewHolder(view)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_wechat_list, null)
+        return ViewHolder(view, itemClickListener)
     }
 
-    class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        private val titleTV: TextView = view.find(R.id.toutiao_item_title)
-        private val authorTV: TextView = view.find(R.id.toutiao_item_author)
-        private val dateTV: TextView = view.find(R.id.toutiao_item_date)
-        private val img: ImageView = view.find(R.id.toutiao_item_img)
+    class ViewHolder(val view: View, private val itemClickListener: (WeChatInfoResultData) -> Unit) : RecyclerView.ViewHolder(view) {
+        private val titleTV: TextView = view.find(R.id.title)
+        private val authorTV: TextView = view.find(R.id.source)
+
 
         fun bindView(weChatInfoResultData: WeChatInfoResultData) {
             with(weChatInfoResultData) {
                 titleTV.text = title
                 authorTV.text = source
-                dateTV.text = mark
-                Picasso.with(view.context)
-                        .load(url)
-                        .placeholder(R.drawable.toutiao_default)
-                        .error(R.drawable.toutiao_default)
-                        .into(img)
+                itemView.setOnClickListener { itemClickListener(this) }
             }
         }
     }

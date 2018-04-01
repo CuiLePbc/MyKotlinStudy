@@ -1,10 +1,11 @@
-package com.cuile.mykotlinstudy.wechat.vandp
+package com.cuile.mykotlinstudy.yike.vandp
 
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +13,8 @@ import com.cuile.mykotlinstudy.DataInterface
 import com.cuile.mykotlinstudy.EndLessOnScrollListener
 import com.cuile.mykotlinstudy.OnFragmentInteractionListener
 import com.cuile.mykotlinstudy.R
-import com.cuile.mykotlinstudy.wechat.data.WeChatInfo
-import com.cuile.mykotlinstudy.wechat.data.WeChatInfoResultData
-import com.cuile.mykotlinstudy.wechat.vandp.adapter.WechatListAdapter
+import com.cuile.mykotlinstudy.yike.data.YiKeInfo
+import com.cuile.mykotlinstudy.yike.vandp.adapter.YiKeListAdapter
 import kotlinx.android.synthetic.main.fragment_datas.*
 import org.jetbrains.anko.longToast
 
@@ -23,24 +23,20 @@ import org.jetbrains.anko.longToast
  * Activities that contain this fragment must implement the
  * [OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [WeChatFragment.newInstance] factory method to
+ * Use the [YiKeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class WeChatFragment : Fragment(), WeChatContract.View {
-    override fun addList(datas: DataInterface) {
-        weChatListAdapter.items.addAll((datas as WeChatInfo).result.list)
-        weChatListAdapter.notifyDataSetChanged()
-    }
+class YiKeFragment : Fragment(), YiKeContract.View {
 
-    private lateinit var weChatListAdapter: WechatListAdapter
+    private lateinit var yiKeListAdapter: YiKeListAdapter
 
-    private var weChatPresenter: WeChatContract.Presenter? = null
+    private var yiKePresenter: YiKeContract.Presenter
     init {
-        weChatPresenter = WeChatPresenter(this)
+        yiKePresenter = YiKePresenter(this)
     }
 
-    override fun setPresenter(presenter: WeChatContract.Presenter) {
-        this.weChatPresenter = presenter
+    override fun setPresenter(presenter: YiKeContract.Presenter) {
+        this.yiKePresenter = presenter
     }
 
     override fun showLoadingBar() {
@@ -51,37 +47,20 @@ class WeChatFragment : Fragment(), WeChatContract.View {
         data_swip_refresh.post { data_swip_refresh.isRefreshing = false }
     }
 
+    override fun addList(datas: DataInterface) {
+        yiKeListAdapter.items.addAll((datas as YiKeInfo).result)
+        yiKeListAdapter.notifyDataSetChanged()
+    }
     override fun isActive(): Boolean = isAdded
 
     override fun refreshList(datas: DataInterface) {
-        weChatListAdapter.items.clear()
-        weChatListAdapter.items.addAll((datas as WeChatInfo).result.list)
-        weChatListAdapter.notifyDataSetChanged()
+        yiKeListAdapter.items.clear()
+        yiKeListAdapter.items.addAll((datas as YiKeInfo).result)
+        yiKeListAdapter.notifyDataSetChanged()
     }
 
     override fun refreshFailed() {
         activity.longToast("加载数据失败")
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        weChatListAdapter = WechatListAdapter { onItemClicked(it) }
-        data_list.layoutManager = LinearLayoutManager(activity)
-        data_list.adapter = weChatListAdapter
-        data_list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-        data_list.addOnScrollListener(EndLessOnScrollListener{
-            weChatPresenter?.requestMoreDatas(it)
-        })
-
-        data_swip_refresh.setOnRefreshListener { weChatPresenter?.requestDatas(1) }
-        weChatPresenter?.requestDatas(1)
-    }
-
-    private fun onItemClicked(weChatInfoResultData: WeChatInfoResultData) {
-        if (mListener != null) {
-            mListener!!.onFragmentInteraction(weChatInfoResultData)
-        }
     }
 
     private var mParam1: String? = null
@@ -101,6 +80,23 @@ class WeChatFragment : Fragment(), WeChatContract.View {
                               savedInstanceState: Bundle?): View? =
             inflater!!.inflate(R.layout.fragment_datas, container, false)
 
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        yiKeListAdapter = YiKeListAdapter()
+
+        data_list.layoutManager = LinearLayoutManager(activity)
+        data_list.adapter = yiKeListAdapter
+        data_list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+        data_list.addOnScrollListener(
+                EndLessOnScrollListener{
+                    yiKePresenter.requestMore(false)
+                }
+        )
+
+        data_swip_refresh.setOnRefreshListener { yiKePresenter.requestDatas(false) }
+        yiKePresenter.requestDatas(true)
+    }
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
@@ -116,8 +112,8 @@ class WeChatFragment : Fragment(), WeChatContract.View {
     }
 
     companion object {
-        private const val ARG_PARAM1 = "param1"
-        private const val ARG_PARAM2 = "param2"
+        private val ARG_PARAM1 = "param1"
+        private val ARG_PARAM2 = "param2"
 
         /**
          * Use this factory method to create a new instance of
@@ -125,10 +121,10 @@ class WeChatFragment : Fragment(), WeChatContract.View {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment WeChatFragment.
+         * @return A new instance of fragment YiKeFragment.
          */
-        fun newInstance(param1: String = "", param2: String = ""): WeChatFragment {
-            val fragment = WeChatFragment()
+        fun newInstance(param1: String = "", param2: String = ""): YiKeFragment {
+            val fragment = YiKeFragment()
             val args = Bundle()
             args.putString(ARG_PARAM1, param1)
             args.putString(ARG_PARAM2, param2)

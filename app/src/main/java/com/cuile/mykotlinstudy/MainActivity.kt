@@ -1,6 +1,5 @@
 package com.cuile.mykotlinstudy
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -13,16 +12,22 @@ import android.view.MenuItem
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfoResultData
 import com.cuile.mykotlinstudy.toutiao.vandp.TouTiaoDetailActivity
 import com.cuile.mykotlinstudy.toutiao.vandp.TouTiaoFragment
+import com.cuile.mykotlinstudy.wechat.data.WeChatInfoResultData
+import com.cuile.mykotlinstudy.wechat.vandp.WeChatDetailActivity
 import com.cuile.mykotlinstudy.wechat.vandp.WeChatFragment
+import com.cuile.mykotlinstudy.yike.vandp.YiKeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import org.jetbrains.anko.startActivity
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, TouTiaoFragment.OnFragmentInteractionListener, WeChatFragment.OnFragmentInteractionListener{
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener{
 
 
-    override fun onFragmentInteraction(touTiaoInfoResultData: TouTiaoInfoResultData) {
-        startActivity<TouTiaoDetailActivity>(TouTiaoDetailActivity.TOUTIAO_ITEM_URL to touTiaoInfoResultData.url)
+    override fun onFragmentInteraction(itemData: DataItemInterface) {
+        when(itemData) {
+            is TouTiaoInfoResultData -> startActivity<TouTiaoDetailActivity>(ItemDetailActivity.ITEM_URL to itemData.url)
+            is WeChatInfoResultData -> startActivity<WeChatDetailActivity>(ItemDetailActivity.ITEM_URL to itemData.url)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +78,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun addYiKe() {
+        var yiKeFragment = supportFragmentManager.findFragmentByTag(getString(R.string.tag_yike_fragment))
+        if (yiKeFragment == null) {
+            yiKeFragment = YiKeFragment.newInstance()
+            supportFragmentManager.beginTransaction().replace(R.id.main_container, yiKeFragment, getString(R.string.tag_yike_fragment)).commit()
+        }
         title = getString(R.string.smile)
     }
 
@@ -127,6 +137,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    override fun onFragmentInteraction(uri: Uri) {
-    }
+
 }
