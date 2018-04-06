@@ -5,13 +5,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.cuile.mykotlinstudy.DataInterface
-import com.cuile.mykotlinstudy.EndLessOnScrollListener
-import com.cuile.mykotlinstudy.OnFragmentInteractionListener
+import com.cuile.mykotlinstudy.intfac.DataInterface
+import com.cuile.mykotlinstudy.intfac.EndLessOnScrollListener
+import com.cuile.mykotlinstudy.intfac.OnFragmentInteractionListener
 import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.yike.data.YiKeInfo
 import com.cuile.mykotlinstudy.yike.vandp.adapter.YiKeListAdapter
@@ -27,7 +26,7 @@ import org.jetbrains.anko.longToast
  * create an instance of this fragment.
  */
 class YiKeFragment : Fragment(), YiKeContract.View {
-
+    private var endLessOnScrollListener: EndLessOnScrollListener? = null
     private lateinit var yiKeListAdapter: YiKeListAdapter
 
     private var yiKePresenter: YiKeContract.Presenter
@@ -87,11 +86,7 @@ class YiKeFragment : Fragment(), YiKeContract.View {
         data_list.layoutManager = LinearLayoutManager(activity)
         data_list.adapter = yiKeListAdapter
         data_list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-        data_list.addOnScrollListener(
-                EndLessOnScrollListener{
-                    yiKePresenter.requestMore(false)
-                }
-        )
+        data_list.addOnScrollListener(endLessOnScrollListener)
 
         data_swip_refresh.setOnRefreshListener { yiKePresenter.requestDatas(false) }
         yiKePresenter.requestDatas(true)
@@ -99,6 +94,9 @@ class YiKeFragment : Fragment(), YiKeContract.View {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+        endLessOnScrollListener = EndLessOnScrollListener {
+            yiKePresenter.requestMore(false)
+        }
         if (context is OnFragmentInteractionListener) {
             mListener = context
         } else {
@@ -109,6 +107,7 @@ class YiKeFragment : Fragment(), YiKeContract.View {
     override fun onDetach() {
         super.onDetach()
         mListener = null
+        endLessOnScrollListener = null
     }
 
     companion object {

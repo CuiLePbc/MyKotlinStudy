@@ -1,7 +1,7 @@
 package com.cuile.mykotlinstudy.wechat.data
 
 import android.util.Log.i
-import com.cuile.mykotlinstudy.DataRequestCallBack
+import com.cuile.mykotlinstudy.intfac.DataRequestCallBack
 import com.google.gson.Gson
 import org.jetbrains.anko.async
 import org.jetbrains.anko.uiThread

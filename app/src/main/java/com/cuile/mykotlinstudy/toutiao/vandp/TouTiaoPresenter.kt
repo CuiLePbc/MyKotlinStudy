@@ -1,7 +1,7 @@
 package com.cuile.mykotlinstudy.toutiao.vandp
 
-import com.cuile.mykotlinstudy.DataInterface
-import com.cuile.mykotlinstudy.DataRequestCallBack
+import com.cuile.mykotlinstudy.intfac.DataInterface
+import com.cuile.mykotlinstudy.intfac.DataRequestCallBack
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoRequest
 
 /**

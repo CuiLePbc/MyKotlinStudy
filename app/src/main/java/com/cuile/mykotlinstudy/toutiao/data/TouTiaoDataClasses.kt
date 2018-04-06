@@ -2,8 +2,8 @@ package com.cuile.mykotlinstudy.toutiao.data
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.cuile.mykotlinstudy.DataInterface
-import com.cuile.mykotlinstudy.DataItemInterface
+import com.cuile.mykotlinstudy.intfac.DataInterface
+import com.cuile.mykotlinstudy.intfac.DataItemInterface
 
 
 /**

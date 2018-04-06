@@ -1,4 +1,4 @@
-package com.cuile.mykotlinstudy
+package com.cuile.mykotlinstudy.intfac
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -23,15 +23,9 @@ class EndLessOnScrollListener(private val op: (currentCount: Int) -> Unit) : Rec
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
 
-
-
         visiableItemCount = recyclerView.childCount
         totalItemCount = (recyclerView.layoutManager as LinearLayoutManager).itemCount
         firstVisiableItemPosition = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-
-        Log.d("wnwn","firstVisibleItem: " + firstVisiableItemPosition)
-        Log.d("wnwn","totalItemCount:" + totalItemCount)
-        Log.d("wnwn", "visibleItemCount:" + visiableItemCount)
 
         if (isLoading) {
             if (totalItemCount > previousItemCount) {
@@ -42,6 +36,9 @@ class EndLessOnScrollListener(private val op: (currentCount: Int) -> Unit) : Rec
 
         if (!isLoading && totalItemCount - visiableItemCount <= firstVisiableItemPosition) {
             mCurrentPage ++
+            Log.d("wnwn","firstVisibleItem: " + firstVisiableItemPosition)
+            Log.d("wnwn","totalItemCount:" + totalItemCount)
+            Log.d("OnScrolled", "currentPage: $mCurrentPage")
             onLoadMore(mCurrentPage)
             isLoading = true
         }

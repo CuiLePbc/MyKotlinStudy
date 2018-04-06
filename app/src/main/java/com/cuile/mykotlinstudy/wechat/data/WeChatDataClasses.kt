@@ -2,8 +2,8 @@ package com.cuile.mykotlinstudy.wechat.data
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.cuile.mykotlinstudy.DataInterface
-import com.cuile.mykotlinstudy.DataItemInterface
+import com.cuile.mykotlinstudy.intfac.DataInterface
+import com.cuile.mykotlinstudy.intfac.DataItemInterface
 
 /**
  * Created by cuile on 2018/3/20.
@@ -11,7 +11,7 @@ import com.cuile.mykotlinstudy.DataItemInterface
  */
 data class WeChatInfo(val result: WeChatInfoResult, val reason: String, val error_code: Int) : DataInterface
 data class WeChatInfoResult(val list: List<WeChatInfoResultData>, val totalPage: Int, val ps: Int, val pno: Int)
-data class WeChatInfoResultData(val id: String, val title: String, val source: String, val firstImg: String, val mark: String, val url: String) : Parcelable, DataItemInterface{
+data class WeChatInfoResultData(val id: String, val title: String, val source: String, val firstImg: String, val mark: String, val url: String) : Parcelable, DataItemInterface {
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),

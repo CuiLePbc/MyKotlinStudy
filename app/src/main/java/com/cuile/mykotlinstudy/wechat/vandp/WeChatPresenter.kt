@@ -1,8 +1,7 @@
 package com.cuile.mykotlinstudy.wechat.vandp
 
-import com.cuile.mykotlinstudy.DataInterface
-import com.cuile.mykotlinstudy.DataRequestCallBack
-import com.cuile.mykotlinstudy.wechat.data.WeChatInfo
+import com.cuile.mykotlinstudy.intfac.DataInterface
+import com.cuile.mykotlinstudy.intfac.DataRequestCallBack
 import com.cuile.mykotlinstudy.wechat.data.WeChatRequest
 
 /**

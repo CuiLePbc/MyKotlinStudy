@@ -8,9 +8,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.cuile.mykotlinstudy.DataInterface
-import com.cuile.mykotlinstudy.EndLessOnScrollListener
-import com.cuile.mykotlinstudy.OnFragmentInteractionListener
+import com.cuile.mykotlinstudy.intfac.DataInterface
+import com.cuile.mykotlinstudy.intfac.EndLessOnScrollListener
+import com.cuile.mykotlinstudy.intfac.OnFragmentInteractionListener
 import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.wechat.data.WeChatInfo
 import com.cuile.mykotlinstudy.wechat.data.WeChatInfoResultData
@@ -33,7 +33,7 @@ class WeChatFragment : Fragment(), WeChatContract.View {
     }
 
     private lateinit var weChatListAdapter: WechatListAdapter
-
+    private var endLessOnScrollListener: EndLessOnScrollListener? = null
     private var weChatPresenter: WeChatContract.Presenter? = null
     init {
         weChatPresenter = WeChatPresenter(this)
@@ -70,11 +70,12 @@ class WeChatFragment : Fragment(), WeChatContract.View {
         data_list.layoutManager = LinearLayoutManager(activity)
         data_list.adapter = weChatListAdapter
         data_list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-        data_list.addOnScrollListener(EndLessOnScrollListener{
-            weChatPresenter?.requestMoreDatas(it)
-        })
+        data_list.addOnScrollListener(endLessOnScrollListener)
 
-        data_swip_refresh.setOnRefreshListener { weChatPresenter?.requestDatas(1) }
+        data_swip_refresh.setOnRefreshListener {
+            endLessOnScrollListener?.mCurrentPage = 1
+            weChatPresenter?.requestDatas(1)
+        }
         weChatPresenter?.requestDatas(1)
     }
 
@@ -103,6 +104,9 @@ class WeChatFragment : Fragment(), WeChatContract.View {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+        endLessOnScrollListener = EndLessOnScrollListener {
+            weChatPresenter?.requestMoreDatas(it)
+        }
         if (context is OnFragmentInteractionListener) {
             mListener = context
         } else {
@@ -112,6 +116,7 @@ class WeChatFragment : Fragment(), WeChatContract.View {
 
     override fun onDetach() {
         super.onDetach()
+        endLessOnScrollListener = null
         mListener = null
     }
 
