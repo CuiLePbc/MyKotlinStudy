@@ -8,14 +8,18 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.cuile.mykotlinstudy.DataTypeTabEntity
+import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.intfac.DataInterface
 import com.cuile.mykotlinstudy.intfac.EndLessOnScrollListener
 import com.cuile.mykotlinstudy.intfac.OnFragmentInteractionListener
-import com.cuile.mykotlinstudy.R
+import com.cuile.mykotlinstudy.intfac.TabSelectedListener
 import com.cuile.mykotlinstudy.yike.data.YiKeInfo
 import com.cuile.mykotlinstudy.yike.vandp.adapter.YiKeListAdapter
+import com.flyco.tablayout.listener.CustomTabEntity
 import kotlinx.android.synthetic.main.fragment_datas.*
 import org.jetbrains.anko.longToast
+import org.jetbrains.anko.toast
 
 /**
  * A simple [Fragment] subclass.
@@ -26,6 +30,8 @@ import org.jetbrains.anko.longToast
  * create an instance of this fragment.
  */
 class YiKeFragment : Fragment(), YiKeContract.View {
+    private var isPic = false
+
     private var endLessOnScrollListener: EndLessOnScrollListener? = null
     private lateinit var yiKeListAdapter: YiKeListAdapter
 
@@ -81,21 +87,67 @@ class YiKeFragment : Fragment(), YiKeContract.View {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        yiKeListAdapter = YiKeListAdapter()
 
+        initList()
+        initTab()
+
+        data_swip_refresh.setOnRefreshListener { refreshDatas() }
+
+        initData()
+    }
+
+    private fun initData() {
+        isPic = false
+        datatype_tablayout.currentTab = 0
+        refreshDatas()
+    }
+
+    private fun initTab() {
+        val titleList: ArrayList<CustomTabEntity> = arrayListOf(
+                DataTypeTabEntity("轻松一刻", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
+                DataTypeTabEntity("每日趣图", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon)
+        )
+        datatype_tablayout.setTabData(titleList)
+        datatype_tablayout.setOnTabSelectListener(TabSelectedListener{
+
+            when(it) {
+                0 -> {
+                    if (isPic) {
+                        isPic = false
+                        refreshDatas()
+                    }
+                    else
+                        data_list.scrollToPosition(0)
+                }
+                1 -> {
+                    if (!isPic) {
+                        isPic = true
+                        refreshDatas()
+                    }
+                    else
+                        data_list.scrollToPosition(0)
+                }
+            }
+        })
+    }
+
+    private fun initList() {
+        yiKeListAdapter = YiKeListAdapter()
         data_list.layoutManager = LinearLayoutManager(activity)
         data_list.adapter = yiKeListAdapter
         data_list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
         data_list.addOnScrollListener(endLessOnScrollListener)
+    }
 
-        data_swip_refresh.setOnRefreshListener { yiKePresenter.requestDatas(false) }
-        yiKePresenter.requestDatas(true)
+    private fun refreshDatas() {
+        yiKePresenter.requestDatas(isPic)
+        mListener?.onActivityTitleChange(if (isPic) "每日趣图" else "轻松一刻")
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         endLessOnScrollListener = EndLessOnScrollListener {
-            yiKePresenter.requestMore(false)
+            yiKePresenter.requestMore(isPic)
         }
         if (context is OnFragmentInteractionListener) {
             mListener = context

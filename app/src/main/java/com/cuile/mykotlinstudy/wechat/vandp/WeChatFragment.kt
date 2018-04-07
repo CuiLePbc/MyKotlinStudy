@@ -65,6 +65,7 @@ class WeChatFragment : Fragment(), WeChatContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        datatype_tablayout.visibility = View.GONE
 
         weChatListAdapter = WechatListAdapter { onItemClicked(it) }
         data_list.layoutManager = LinearLayoutManager(activity)

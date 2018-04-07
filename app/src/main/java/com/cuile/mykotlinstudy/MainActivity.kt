@@ -2,9 +2,8 @@ package com.cuile.mykotlinstudy
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -24,6 +23,14 @@ import org.jetbrains.anko.startActivity
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener {
 
+    private var toutiaoFragment: Fragment? = null
+    private var weChatFragment: Fragment? = null
+    private var yiKeFragment: Fragment? = null
+
+    override fun onActivityTitleChange(newTitle: String) {
+        title = newTitle
+    }
+
 
     override fun onFragmentInteraction(itemData: DataItemInterface) {
         when(itemData) {
@@ -38,13 +45,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // toolbar
         setSupportActionBar(toolbar)
-
-        // fab button
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-
 
 
         val toggle = ActionBarDrawerToggle(
@@ -61,8 +61,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun addToutiao() {
         title = getString(R.string.toutiao)
+        supportActionBar?.hide()
         // 初始化头条fragment
-        var toutiaoFragment = supportFragmentManager.findFragmentByTag(getString(R.string.tag_toutiao_fragment))
+        toutiaoFragment = supportFragmentManager.findFragmentByTag(getString(R.string.tag_toutiao_fragment))
         if (toutiaoFragment == null) {
             toutiaoFragment = TouTiaoFragment.newInstance()
             supportFragmentManager.beginTransaction().replace(R.id.main_container, toutiaoFragment, getString(R.string.tag_toutiao_fragment)).commit()
@@ -71,27 +72,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun addWeChat() {
-        var weChatFragment = supportFragmentManager.findFragmentByTag(getString(R.string.tag_wechat_fragment))
+        weChatFragment = supportFragmentManager.findFragmentByTag(getString(R.string.tag_wechat_fragment))
         if (weChatFragment == null) {
             weChatFragment = WeChatFragment.newInstance()
             supportFragmentManager.beginTransaction().replace(R.id.main_container, weChatFragment, getString(R.string.tag_wechat_fragment)).commit()
         }
         title = getString(R.string.wechat)
+        supportActionBar?.show()
     }
 
     fun addYiKe() {
-        var yiKeFragment = supportFragmentManager.findFragmentByTag(getString(R.string.tag_yike_fragment))
+        yiKeFragment = supportFragmentManager.findFragmentByTag(getString(R.string.tag_yike_fragment))
         if (yiKeFragment == null) {
             yiKeFragment = YiKeFragment.newInstance()
             supportFragmentManager.beginTransaction().replace(R.id.main_container, yiKeFragment, getString(R.string.tag_yike_fragment)).commit()
         }
         title = getString(R.string.smile)
+        supportActionBar?.hide()
     }
 
     override fun onBackPressed() {
-        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
+
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+            drawer_layout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }

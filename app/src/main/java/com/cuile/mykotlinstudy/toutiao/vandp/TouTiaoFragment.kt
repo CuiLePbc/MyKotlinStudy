@@ -14,13 +14,11 @@ import com.cuile.mykotlinstudy.intfac.OnFragmentInteractionListener
 import com.cuile.mykotlinstudy.intfac.TabSelectedListener
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfo
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfoResultData
-import com.cuile.mykotlinstudy.toutiao.data.TouTiaoTabEntity
+import com.cuile.mykotlinstudy.DataTypeTabEntity
 import com.cuile.mykotlinstudy.toutiao.vandp.adapter.ToutiaoListAdapter
 import com.flyco.tablayout.listener.CustomTabEntity
-import kotlinx.android.synthetic.main.fragment_datas_toutiao.*
-import kotlinx.android.synthetic.main.item_wechat_list.*
+import kotlinx.android.synthetic.main.fragment_datas.*
 import org.jetbrains.anko.longToast
-import org.jetbrains.anko.toast
 
 /**
  * A simple [Fragment] subclass.
@@ -33,7 +31,7 @@ import org.jetbrains.anko.toast
 class TouTiaoFragment : Fragment(), TouTiaoContract.View {
 
 
-    val TYPE_NAME = mapOf(
+    private val TYPE_NAME = mapOf(
             Pair("头条", "top"),
             Pair("社会", "shehui"),
             Pair("国内", "guonei"),
@@ -44,6 +42,18 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
             Pair("科技", "keji"),
             Pair("财经", "caijing"),
             Pair("时尚", "shishang")
+    )
+    private val titleList: ArrayList<CustomTabEntity> = arrayListOf(
+            DataTypeTabEntity("头条", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
+            DataTypeTabEntity("社会", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
+            DataTypeTabEntity("国内", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
+            DataTypeTabEntity("国际", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
+            DataTypeTabEntity("娱乐", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
+            DataTypeTabEntity("军事", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
+            DataTypeTabEntity("科技", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
+            DataTypeTabEntity("财经", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
+            DataTypeTabEntity("时尚", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
+            DataTypeTabEntity("体育", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon)
     )
 
 
@@ -87,14 +97,14 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
      * 显示进度条
      */
     override fun showLoadingBar() {
-        data_toutiao_swip_refresh.post { data_toutiao_swip_refresh.isRefreshing = true }
+        data_swip_refresh.post { data_swip_refresh.isRefreshing = true }
     }
 
     /**
      * 隐藏进度条
      */
     override fun hideLoadingBar() {
-        data_toutiao_swip_refresh.post { data_toutiao_swip_refresh.isRefreshing = false }
+        data_swip_refresh.post { data_swip_refresh.isRefreshing = false }
     }
 
     /**
@@ -118,40 +128,44 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? =
-            inflater!!.inflate(R.layout.fragment_datas_toutiao, container, false)
+            inflater!!.inflate(R.layout.fragment_datas, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val titleList: ArrayList<CustomTabEntity> = arrayListOf(
-                TouTiaoTabEntity("头条", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
-                TouTiaoTabEntity("社会", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
-                TouTiaoTabEntity("国内", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
-                TouTiaoTabEntity("国际", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
-                TouTiaoTabEntity("娱乐", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
-                TouTiaoTabEntity("军事", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
-                TouTiaoTabEntity("科技", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
-                TouTiaoTabEntity("财经", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
-                TouTiaoTabEntity("时尚", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon),
-                TouTiaoTabEntity("体育", R.drawable.navigation_empty_icon, R.drawable.navigation_empty_icon)
-        )
-        toutiao_tablayout.setTabData(titleList)
-        toutiao_tablayout.setOnTabSelectListener(TabSelectedListener{
-            toutiaoPresenter?.requestDatas(TYPE_NAME[titleList[it].tabTitle]!!)
+        initList()
+        initTab()
+        data_swip_refresh.setOnRefreshListener { refreshDatas(titleList[datatype_tablayout.currentTab].tabTitle!!) }
+        initData()
+
+    }
+
+    private fun initData() {
+        datatype_tablayout.currentTab = 0
+        refreshDatas(titleList[datatype_tablayout.currentTab].tabTitle!!)
+    }
+
+    private fun initTab() {
+        datatype_tablayout.setTabData(titleList)
+        datatype_tablayout.setOnTabSelectListener(TabSelectedListener{
+            refreshDatas(titleList[it].tabTitle!!)
         })
+    }
 
-
+    private fun initList() {
         toutiaoAdapter = ToutiaoListAdapter{ onItemClicked(it) }
+        data_list.layoutManager = LinearLayoutManager(activity)
+        data_list.adapter = toutiaoAdapter
+        data_list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+    }
 
-        data_toutiao_list.layoutManager = LinearLayoutManager(activity)
-        data_toutiao_list.adapter = toutiaoAdapter
-        data_toutiao_list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-
-        data_toutiao_swip_refresh.setOnRefreshListener { toutiaoPresenter?.requestDatas("top") }
-
-
-        toutiao_tablayout.currentTab = 0
-        toutiaoPresenter?.requestDatas(TYPE_NAME[titleList[toutiao_tablayout.currentTab].tabTitle]!!)
+    private fun refreshDatas(title: String) {
+        toutiaoPresenter?.requestDatas(TYPE_NAME[title]!!)
+        if (title == "头条") {
+            mListener?.onActivityTitleChange("每日头条")
+        } else {
+            mListener?.onActivityTitleChange(title + "头条")
+        }
     }
 
 
