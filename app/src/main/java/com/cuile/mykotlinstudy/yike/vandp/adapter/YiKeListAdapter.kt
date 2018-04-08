@@ -43,6 +43,7 @@ class YiKeListAdapter(var items: MutableList<YiKeInfoResultData> = mutableListOf
             }
             is ViewHolderIMG -> {
                 holder.titleTV.text = items[position].content
+                GlideApp.with(holder.contentIV.context).clear(holder.contentIV)
                 GlideApp.with(holder.contentIV.context)
                         .load(items[position].url)
                         .centerCrop()
