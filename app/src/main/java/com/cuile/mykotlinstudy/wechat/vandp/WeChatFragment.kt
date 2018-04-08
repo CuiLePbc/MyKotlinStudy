@@ -60,7 +60,7 @@ class WeChatFragment : Fragment(), WeChatContract.View {
     }
 
     override fun refreshFailed() {
-        activity.longToast("加载数据失败")
+        activity?.longToast("加载数据失败")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -93,15 +93,14 @@ class WeChatFragment : Fragment(), WeChatContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            mParam1 = arguments.getString(ARG_PARAM1)
-            mParam2 = arguments.getString(ARG_PARAM2)
+        if (arguments != null && arguments is Bundle) {
+            mParam1 = (arguments as Bundle).getString(ARG_PARAM1)
+            mParam2 = (arguments as Bundle).getString(ARG_PARAM2)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater!!.inflate(R.layout.fragment_datas, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_datas, container, false)
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)

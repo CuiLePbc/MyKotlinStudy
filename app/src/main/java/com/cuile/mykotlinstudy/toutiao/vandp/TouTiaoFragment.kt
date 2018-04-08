@@ -8,13 +8,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.cuile.mykotlinstudy.DataTypeTabEntity
 import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.intfac.DataInterface
 import com.cuile.mykotlinstudy.intfac.OnFragmentInteractionListener
 import com.cuile.mykotlinstudy.intfac.TabSelectedListener
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfo
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfoResultData
-import com.cuile.mykotlinstudy.DataTypeTabEntity
 import com.cuile.mykotlinstudy.toutiao.vandp.adapter.ToutiaoListAdapter
 import com.flyco.tablayout.listener.CustomTabEntity
 import kotlinx.android.synthetic.main.fragment_datas.*
@@ -70,7 +70,7 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
     private lateinit var toutiaoAdapter: ToutiaoListAdapter
 
     override fun refreshFailed() {
-        activity.longToast("加载数据失败")
+        activity?.longToast("加载数据失败")
     }
 
     /**
@@ -120,15 +120,19 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            mParam1 = arguments.getString(ARG_PARAM1)
-            mParam2 = arguments.getString(ARG_PARAM2)
+        if (arguments != null && arguments is Bundle) {
+            mParam1 = (arguments as Bundle).getString(ARG_PARAM1)
+            mParam2 = (arguments as Bundle).getString(ARG_PARAM2)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater!!.inflate(R.layout.fragment_datas, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_datas, container, false)
+
+
+//    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+//                              savedInstanceState: Bundle?): View? =
+//            inflater!!.inflate(R.layout.fragment_datas, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

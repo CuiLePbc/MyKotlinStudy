@@ -14,8 +14,8 @@ class WeChatPresenter(private val weChatView: WeChatContract.View) : WeChatContr
     }
 
 
-    override fun requestSuccess(dataInterface: DataInterface) {
-        weChatView.refreshList(dataInterface)
+    override fun requestSuccess(dataInfo: DataInterface) {
+        weChatView.refreshList(dataInfo)
         weChatView.hideLoadingBar()
     }
 

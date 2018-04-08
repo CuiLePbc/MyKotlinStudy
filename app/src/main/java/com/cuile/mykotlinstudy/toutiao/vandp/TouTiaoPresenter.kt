@@ -13,8 +13,8 @@ class TouTiaoPresenter(val toutiaoView: TouTiaoContract.View) : TouTiaoContract.
         toutiaoView.addList(dataInfo)
     }
 
-    override fun requestSuccess(dataInterface: DataInterface) {
-        toutiaoView.refreshList(dataInterface)
+    override fun requestSuccess(dataInfo: DataInterface) {
+        toutiaoView.refreshList(dataInfo)
         toutiaoView.hideLoadingBar()
 
     }

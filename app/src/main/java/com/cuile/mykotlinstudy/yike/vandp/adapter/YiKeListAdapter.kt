@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.cuile.mykotlinstudy.GlideApp
 import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.yike.data.YiKeInfoResultData
 import org.jetbrains.anko.find
@@ -42,8 +43,11 @@ class YiKeListAdapter(var items: MutableList<YiKeInfoResultData> = mutableListOf
             }
             is ViewHolderIMG -> {
                 holder.titleTV.text = items[position].content
-                Glide.with(holder.contentIV.context)
+                GlideApp.with(holder.contentIV.context)
                         .load(items[position].url)
+                        .centerCrop()
+                        .placeholder(R.drawable.toutiao_default)
+                        .error(R.drawable.toutiao_default)
                         .into(holder.contentIV)
             }
         }
