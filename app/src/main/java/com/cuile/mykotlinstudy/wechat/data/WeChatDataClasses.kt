@@ -41,4 +41,23 @@ data class WeChatInfoResultData(val id: String, val title: String, val source: S
             return arrayOfNulls(size)
         }
     }
+
+
+
+
+
+
 }
+data class WeChatNews(
+        val code: Int,
+        val msg: String,
+        val newslist: List<NewsBody>
+)
+
+data class NewsBody(
+        val ctime: String,
+        val title: String,
+        val description: String,
+        val picUrl: String,
+        val url: String
+)

@@ -1,13 +1,17 @@
 package com.cuile.mykotlinstudy
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.cuile.mykotlinstudy.intfac.DataItemInterface
 import com.cuile.mykotlinstudy.intfac.OnFragmentInteractionListener
 import com.cuile.mykotlinstudy.toutiao.data.TouTiaoInfoResultData
@@ -16,6 +20,7 @@ import com.cuile.mykotlinstudy.toutiao.vandp.TouTiaoFragment
 import com.cuile.mykotlinstudy.wechat.data.WeChatInfoResultData
 import com.cuile.mykotlinstudy.wechat.vandp.WeChatDetailActivity
 import com.cuile.mykotlinstudy.wechat.vandp.WeChatFragment
+import com.cuile.mykotlinstudy.yike.data.YiKeInfoResultData
 import com.cuile.mykotlinstudy.yike.vandp.YiKeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -32,10 +37,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    override fun onFragmentInteraction(itemData: DataItemInterface) {
+    override fun onFragmentInteraction(itemData: DataItemInterface, view: View) {
         when(itemData) {
             is TouTiaoInfoResultData -> startActivity<TouTiaoDetailActivity>(ItemDetailActivity.ITEM_URL to itemData.url)
             is WeChatInfoResultData -> startActivity<WeChatDetailActivity>(ItemDetailActivity.ITEM_URL to itemData.url)
+            is YiKeInfoResultData -> {
+                if (itemData.url.isNullOrEmpty()) return
+                val intent = Intent(this.applicationContext, ImgDetailActivity::class.java)
+                intent.putExtra(ImgDetailActivity.ITEM_URL, itemData.url)
+                startActivity(
+                        intent,
+                        ActivityOptions.makeSceneTransitionAnimation(this, view, getString(R.string.yike_share_img)).toBundle())
+            }
         }
     }
 

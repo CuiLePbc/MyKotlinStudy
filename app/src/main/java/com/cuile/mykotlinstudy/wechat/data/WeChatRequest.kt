@@ -14,23 +14,24 @@ import java.net.URL
 class WeChatRequest(numForOnePage: Int = 20, val weChatCallBack: DataRequestCallBack) {
     private var completeUrl: String
     companion object {
-        private const val APPKEY = "5c1c9a9da16231b89756121f69440766"
-        private const val BASE_URL = "http://v.juhe.cn/weixin/query"
+        private const val APPKEY = "cb13c7330d4d351fef3258cb18c470df"
+        private const val BASE_URL = "http://api.tianapi.com/wxnew/"
     }
     init {
-        completeUrl = "$BASE_URL?key=$APPKEY&ps=$numForOnePage&dtype=json"
+        completeUrl = "$BASE_URL?key=$APPKEY&num=$numForOnePage"
     }
 
     fun run(pageNo: Int = 1, isAdded: Boolean) {
-        completeUrl += "&pno=$pageNo"
+        completeUrl += "&page=$pageNo"
 
         async {
             val weChatJsonStr = URL(completeUrl).readText()
-            val weChatInfo = Gson().fromJson<WeChatInfo>(weChatJsonStr, WeChatInfo::class.java)
+            val weChatNews = Gson().fromJson<WeChatNews>(weChatJsonStr, WeChatNews::class.java)
+            val weChatInfo = WeChatConvert.weChatNewsToWeChatInfo(weChatNews)
 
             i("request ", weChatInfo.result.list.size.toString() + " news error_code is " + weChatInfo.error_code)
 
-            if (weChatInfo.error_code == 0) {
+            if (weChatInfo.error_code == 200) {
                 uiThread {
                     if (isAdded)
                         weChatCallBack.requestMoreSuccess(weChatInfo)

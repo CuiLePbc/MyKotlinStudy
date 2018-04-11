@@ -15,9 +15,9 @@ import org.jetbrains.anko.find
  * Created by 崔乐 on 2017/5/22.
  */
 class ToutiaoListAdapter(var items: MutableList<TouTiaoInfoResultData> = mutableListOf(),
-                         val itemClickListener: (TouTiaoInfoResultData) -> Unit) : RecyclerView.Adapter<ToutiaoListAdapter.ViewHolder>() {
+                         private val itemClickListener: (TouTiaoInfoResultData, View) -> Unit) : RecyclerView.Adapter<ToutiaoListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_toutiao_list, null)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_toutiao_wechat_list, null)
         return ViewHolder(view, itemClickListener)
     }
 
@@ -27,12 +27,12 @@ class ToutiaoListAdapter(var items: MutableList<TouTiaoInfoResultData> = mutable
         holder.bindView(items[position])
     }
 
-    class ViewHolder(val view: View, val itemClickListener: (TouTiaoInfoResultData) -> Unit) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(val view: View, private val itemClickListener: (TouTiaoInfoResultData, View) -> Unit) : RecyclerView.ViewHolder(view) {
 
-        private val titleTV: TextView = view.find(R.id.toutiao_item_title)
-        private val authorTV: TextView = view.find(R.id.toutiao_item_author)
-        private val dateTV: TextView = view.find(R.id.toutiao_item_date)
-        private val img: ImageView = view.find(R.id.toutiao_item_img)
+        private val titleTV: TextView = view.find(R.id.item_title)
+        private val authorTV: TextView = view.find(R.id.item_author)
+        private val dateTV: TextView = view.find(R.id.item_date)
+        private val img: ImageView = view.find(R.id.item_img)
 
         fun bindView(touTiaoInfoResultData: TouTiaoInfoResultData) {
             with(touTiaoInfoResultData) {
@@ -44,7 +44,7 @@ class ToutiaoListAdapter(var items: MutableList<TouTiaoInfoResultData> = mutable
                         .placeholder(R.drawable.toutiao_default)
                         .error(R.drawable.toutiao_default)
                         .into(img)
-                itemView.setOnClickListener { itemClickListener(this) }
+                itemView.setOnClickListener { itemClickListener(this, itemView) }
             }
         }
     }

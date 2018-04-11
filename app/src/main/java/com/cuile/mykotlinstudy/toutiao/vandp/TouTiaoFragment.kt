@@ -157,7 +157,9 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
     }
 
     private fun initList() {
-        toutiaoAdapter = ToutiaoListAdapter{ onItemClicked(it) }
+        toutiaoAdapter = ToutiaoListAdapter{ touTiaoInfoResultData: TouTiaoInfoResultData, view: View ->
+            onItemClicked(touTiaoInfoResultData, view)
+        }
         data_list.layoutManager = LinearLayoutManager(activity)
         data_list.adapter = toutiaoAdapter
         data_list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
@@ -173,9 +175,9 @@ class TouTiaoFragment : Fragment(), TouTiaoContract.View {
     }
 
 
-    private fun onItemClicked(touTiaoInfoResultData: TouTiaoInfoResultData) {
+    private fun onItemClicked(touTiaoInfoResultData: TouTiaoInfoResultData, view: View) {
         if (mListener != null) {
-            mListener!!.onFragmentInteraction(touTiaoInfoResultData)
+            mListener!!.onFragmentInteraction(touTiaoInfoResultData, view)
         }
     }
 

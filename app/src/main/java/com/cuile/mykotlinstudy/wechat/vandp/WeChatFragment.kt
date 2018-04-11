@@ -67,7 +67,9 @@ class WeChatFragment : Fragment(), WeChatContract.View {
         super.onViewCreated(view, savedInstanceState)
         datatype_tablayout.visibility = View.GONE
 
-        weChatListAdapter = WechatListAdapter { onItemClicked(it) }
+        weChatListAdapter = WechatListAdapter { weChatInfoResultData: WeChatInfoResultData, view: View ->
+            onItemClicked(weChatInfoResultData, view)
+        }
         data_list.layoutManager = LinearLayoutManager(activity)
         data_list.adapter = weChatListAdapter
         data_list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
@@ -80,9 +82,9 @@ class WeChatFragment : Fragment(), WeChatContract.View {
         weChatPresenter?.requestDatas(1)
     }
 
-    private fun onItemClicked(weChatInfoResultData: WeChatInfoResultData) {
+    private fun onItemClicked(weChatInfoResultData: WeChatInfoResultData, view: View) {
         if (mListener != null) {
-            mListener!!.onFragmentInteraction(weChatInfoResultData)
+            mListener!!.onFragmentInteraction(weChatInfoResultData, view)
         }
     }
 

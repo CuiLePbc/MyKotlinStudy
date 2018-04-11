@@ -7,5 +7,6 @@ class TouTiaoDetailActivity : ItemDetailActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = "新闻详情"
+        setJSEnable(false)
     }
 }

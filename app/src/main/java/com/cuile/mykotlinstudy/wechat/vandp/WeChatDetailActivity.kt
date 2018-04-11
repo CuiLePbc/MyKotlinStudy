@@ -11,5 +11,7 @@ class WeChatDetailActivity : ItemDetailActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = "精选详情"
+
+        setJSEnable(true)
     }
 }

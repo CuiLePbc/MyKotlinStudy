@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.cuile.mykotlinstudy.intfac.EndLessOnScrollListener
 import com.cuile.mykotlinstudy.intfac.OnFragmentInteractionListener
 import com.cuile.mykotlinstudy.intfac.TabSelectedListener
 import com.cuile.mykotlinstudy.yike.data.YiKeInfo
+import com.cuile.mykotlinstudy.yike.data.YiKeInfoResultData
 import com.cuile.mykotlinstudy.yike.vandp.adapter.YiKeListAdapter
 import com.flyco.tablayout.listener.CustomTabEntity
 import kotlinx.android.synthetic.main.fragment_datas.*
@@ -131,11 +133,18 @@ class YiKeFragment : Fragment(), YiKeContract.View {
     }
 
     private fun initList() {
-        yiKeListAdapter = YiKeListAdapter()
+        yiKeListAdapter = YiKeListAdapter{ yiKeInfoResultData: YiKeInfoResultData, view: View ->
+            Log.i("YikeItemClicked:", yiKeInfoResultData.url)
+            onItemClicked(yiKeInfoResultData, view)
+        }
         data_list.layoutManager = LinearLayoutManager(activity)
         data_list.adapter = yiKeListAdapter
         data_list.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
         data_list.addOnScrollListener(endLessOnScrollListener)
+    }
+
+    fun onItemClicked(yiKeInfoResultData: YiKeInfoResultData, view: View) {
+        mListener?.onFragmentInteraction(yiKeInfoResultData, view)
     }
 
     private fun refreshDatas() {
