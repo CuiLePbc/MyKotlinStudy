@@ -23,11 +23,6 @@ class ZhihuPresenter(private val zhihuView: ZhihuContract.View): ZhihuContract.P
         zhihuRequest.getNewsByDate(date)
     }
 
-    override fun requestThemesList() {
-        zhihuView.showLoadingBar()
-        zhihuRequest.getThemes()
-    }
-
     override fun requestTodayThemeNews(themeId: String) {
         zhihuView.showLoadingBar()
         zhihuRequest.getNewsByTheme(themeId)
@@ -43,7 +38,12 @@ class ZhihuPresenter(private val zhihuView: ZhihuContract.View): ZhihuContract.P
         zhihuRequest.getNewsBody(newsId)
     }
 
-
+    override fun requestThemesList() {
+        ZhihuRequest(this).getThemes()
+    }
+    override fun requestThemesSuccess(zhihuThemes: ZhihuThemes) {
+        zhihuView.getThemesList(zhihuThemes)
+    }
 
     override fun requestSuccess(dataInfo: DataInterface) {
 
@@ -67,11 +67,6 @@ class ZhihuPresenter(private val zhihuView: ZhihuContract.View): ZhihuContract.P
     override fun requestMoreHotSuccess(zhihuHistoryNews: ZhihuHistoryNews) {
         zhihuView.hideLoadingBar()
         zhihuView.refreshMoreHot(zhihuHistoryNews)
-    }
-
-    override fun requestThemesListSuccess(zhihuThemes: ZhihuThemes) {
-        zhihuView.hideLoadingBar()
-        zhihuView.refreshThemesList(zhihuThemes)
     }
 
     override fun requestTodayThemeNewsSuccess(zhihuThemeNews: ZhihuThemeNews) {

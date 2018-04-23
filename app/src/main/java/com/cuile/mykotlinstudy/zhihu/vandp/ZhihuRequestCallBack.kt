@@ -10,8 +10,8 @@ import com.cuile.mykotlinstudy.zhihu.data.*
 interface ZhihuRequestCallBack: DataRequestCallBack {
     fun requestTodayHotSuccess(zhihuLatestNews: ZhihuLatestNews)
     fun requestMoreHotSuccess(zhihuHistoryNews: ZhihuHistoryNews)
-    fun requestThemesListSuccess(zhihuThemes: ZhihuThemes)
     fun requestTodayThemeNewsSuccess(zhihuThemeNews: ZhihuThemeNews)
     fun requestMoreThemeNewsSuccess(zhihuThemeNews: ZhihuThemeNews)
     fun requestNewsDetailSuccess(zhihuDetailEntity: ZhihuDetailEntity)
+    fun requestThemesSuccess(zhihuThemes: ZhihuThemes)
 }

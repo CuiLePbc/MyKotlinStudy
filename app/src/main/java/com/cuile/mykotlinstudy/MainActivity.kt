@@ -4,7 +4,6 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -22,6 +21,7 @@ import com.cuile.mykotlinstudy.wechat.vandp.WeChatDetailActivity
 import com.cuile.mykotlinstudy.wechat.vandp.WeChatFragment
 import com.cuile.mykotlinstudy.yike.data.YiKeInfoResultData
 import com.cuile.mykotlinstudy.yike.vandp.YiKeFragment
+import com.cuile.mykotlinstudy.zhihu.vandp.ZhihuFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import org.jetbrains.anko.startActivity
@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var toutiaoFragment: Fragment? = null
     private var weChatFragment: Fragment? = null
     private var yiKeFragment: Fragment? = null
+    private var zhihuFragment: Fragment? = null
 
     override fun onActivityTitleChange(newTitle: String) {
         title = newTitle
@@ -68,7 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // 侧滑菜单监听
         nav_view.setNavigationItemSelectedListener(this)
 
-        addToutiao()
+        addZhihu()
 
     }
 
@@ -101,6 +102,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager.beginTransaction().replace(R.id.main_container, yiKeFragment, getString(R.string.tag_yike_fragment)).commit()
         }
         title = getString(R.string.smile)
+        supportActionBar?.hide()
+    }
+
+    fun addZhihu() {
+        zhihuFragment = supportFragmentManager.findFragmentByTag(getString(R.string.tag_zhihu_fragment))
+        if (zhihuFragment == null) {
+            zhihuFragment = ZhihuFragment.newInstance()
+            supportFragmentManager.beginTransaction().replace(R.id.main_container, zhihuFragment, getString(R.string.tag_zhihu_fragment)).commit()
+        }
+        title = getString(R.string.zhihu)
         supportActionBar?.hide()
     }
 
@@ -140,6 +151,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_smile -> {
                 addYiKe()
+            }
+            R.id.nav_zhihu -> {
+                addZhihu()
             }
             R.id.nav_share -> {
 

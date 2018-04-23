@@ -143,7 +143,7 @@ class YiKeFragment : Fragment(), YiKeContract.View {
         data_list.addOnScrollListener(endLessOnScrollListener)
     }
 
-    fun onItemClicked(yiKeInfoResultData: YiKeInfoResultData, view: View) {
+    private fun onItemClicked(yiKeInfoResultData: YiKeInfoResultData, view: View) {
         mListener?.onFragmentInteraction(yiKeInfoResultData, view)
     }
 

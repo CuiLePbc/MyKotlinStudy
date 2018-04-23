@@ -12,6 +12,8 @@
     <string name="tag_wechat_fragment">wechatFragment</string>
     <string name="smile">轻松一刻</string>
     <string name="tag_yike_fragment">yikeFragment</string>
+    <string name="zhihu">知乎日报</string>
+    <string name="tag_zhihu_fragment">zhihuFragment</string>
     <string name="setting">设置</string>
     <string name="shareapp">推荐给朋友</string>
 

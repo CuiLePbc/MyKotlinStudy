@@ -1,5 +1,6 @@
 package com.cuile.mykotlinstudy.zhihu.data
 
+import android.util.Log
 import com.cuile.mykotlinstudy.intfac.DataRequestCallBack
 import com.google.gson.Gson
 import org.jetbrains.anko.async
@@ -60,7 +61,7 @@ class ZhihuRequest(private val zhihuCallBack: DataRequestCallBack) {
         async {
             val zhihuResultStr = URL(url).readText()
             val zhihuThemes = Gson().fromJson<ZhihuThemes>(zhihuResultStr, ZhihuThemes::class.java)
-
+            Log.i("GetThemes", zhihuThemes.toString())
             if (zhihuThemes != null && zhihuThemes.others.isNotEmpty()) {
                 zhihuCallBack.requestSuccess(zhihuThemes)
             } else {

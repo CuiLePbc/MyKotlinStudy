@@ -12,17 +12,20 @@ interface ZhihuContract {
     interface View : BaseView<Presenter> {
         fun refreshTodayHot(zhihuLatestNews: ZhihuLatestNews)
         fun refreshMoreHot(zhihuHistoryNews: ZhihuHistoryNews)
-        fun refreshThemesList(zhihuThemes: ZhihuThemes)
         fun refreshTodayThemeNews(zhihuThemeNews: ZhihuThemeNews)
         fun refreshMoreThemeNews(zhihuThemeNews: ZhihuThemeNews)
         fun refreshNewsDetail(zhihuDetailEntity: ZhihuDetailEntity)
+
+        fun getThemesList(zhihuThemes: ZhihuThemes)
     }
     interface Presenter : BasePresenter {
         fun requestTodayHot()
         fun requestMoreHot(date: String)
-        fun requestThemesList()
         fun requestTodayThemeNews(themeId: String)
         fun requestMoreThemeNews(themeId: String, currentNewsId: String)
         fun requestNewsDetail(newsId: String)
+
+
+        fun requestThemesList()
     }
 }
