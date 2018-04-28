@@ -13,5 +13,5 @@ interface ZhihuRequestCallBack: DataRequestCallBack {
     fun requestTodayThemeNewsSuccess(zhihuThemeNews: ZhihuThemeNews)
     fun requestMoreThemeNewsSuccess(zhihuThemeNews: ZhihuThemeNews)
     fun requestNewsDetailSuccess(zhihuDetailEntity: ZhihuDetailEntity)
-    fun requestThemesSuccess(zhihuThemes: ZhihuThemes)
+    fun requestThemeSuccess(zhihuThemes: ZhihuThemes)
 }

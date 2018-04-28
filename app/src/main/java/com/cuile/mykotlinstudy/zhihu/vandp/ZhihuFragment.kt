@@ -49,13 +49,13 @@ class ZhihuFragment : Fragment(), ZhihuContract.View, ZhihuThemesDialogSelectedL
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        zhihuPresenter.requestThemesList()
-
-        zhihu_theme_menu_fab.visibility = View.INVISIBLE
+        zhihu_theme_menu_fab.isClickable = false
         zhihu_theme_menu_fab.setOnClickListener {
             if (themes != null)
                 ZhihuThemesDialogFragment(themes,this).show(activity?.supportFragmentManager, "dialog")
         }
+
+        zhihuPresenter.requestThemesList()
     }
 
     override fun onAttach(context: Context) {
@@ -119,7 +119,7 @@ class ZhihuFragment : Fragment(), ZhihuContract.View, ZhihuThemesDialogSelectedL
 
     override fun getThemesList(zhihuThemes: ZhihuThemes) {
         themes = zhihuThemes
-        zhihu_theme_menu_fab.visibility = View.VISIBLE
+        zhihu_theme_menu_fab.isClickable = true
     }
 
     companion object {

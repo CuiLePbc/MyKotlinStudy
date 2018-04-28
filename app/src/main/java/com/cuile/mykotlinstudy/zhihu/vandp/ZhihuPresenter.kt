@@ -41,7 +41,8 @@ class ZhihuPresenter(private val zhihuView: ZhihuContract.View): ZhihuContract.P
     override fun requestThemesList() {
         ZhihuRequest(this).getThemes()
     }
-    override fun requestThemesSuccess(zhihuThemes: ZhihuThemes) {
+
+    override fun requestThemeSuccess(zhihuThemes: ZhihuThemes) {
         zhihuView.getThemesList(zhihuThemes)
     }
 

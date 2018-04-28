@@ -2,6 +2,7 @@ package com.cuile.mykotlinstudy.zhihu.data
 
 import android.util.Log
 import com.cuile.mykotlinstudy.intfac.DataRequestCallBack
+import com.cuile.mykotlinstudy.zhihu.vandp.ZhihuRequestCallBack
 import com.google.gson.Gson
 import org.jetbrains.anko.async
 import java.net.URL
@@ -10,7 +11,7 @@ import java.net.URL
  * Created by cuile on 18-4-13.
  *
  */
-class ZhihuRequest(private val zhihuCallBack: DataRequestCallBack) {
+class ZhihuRequest(private val zhihuCallBack: ZhihuRequestCallBack) {
     companion object {
         private const val BASE_URL = "https://news-at.zhihu.com/api/4"
     }
@@ -26,7 +27,7 @@ class ZhihuRequest(private val zhihuCallBack: DataRequestCallBack) {
             val zhihuLatestNews = Gson().fromJson<ZhihuLatestNews>(zhihuResultStr, ZhihuLatestNews::class.java)
 
             if (zhihuLatestNews != null && zhihuLatestNews.stories.isNotEmpty()) {
-                zhihuCallBack.requestSuccess(zhihuLatestNews)
+                zhihuCallBack.requestTodayHotSuccess(zhihuLatestNews)
             } else {
                 zhihuCallBack.requestFailed()
             }
@@ -46,7 +47,7 @@ class ZhihuRequest(private val zhihuCallBack: DataRequestCallBack) {
             val zhihuHistoryNews = Gson().fromJson<ZhihuHistoryNews>(zhihuResultStr, ZhihuHistoryNews::class.java)
 
             if (zhihuHistoryNews != null && zhihuHistoryNews.stories.isNotEmpty()) {
-                zhihuCallBack.requestSuccess(zhihuHistoryNews)
+                zhihuCallBack.requestMoreHotSuccess(zhihuHistoryNews)
             } else {
                 zhihuCallBack.requestFailed()
             }
@@ -63,7 +64,7 @@ class ZhihuRequest(private val zhihuCallBack: DataRequestCallBack) {
             val zhihuThemes = Gson().fromJson<ZhihuThemes>(zhihuResultStr, ZhihuThemes::class.java)
             Log.i("GetThemes", zhihuThemes.toString())
             if (zhihuThemes != null && zhihuThemes.others.isNotEmpty()) {
-                zhihuCallBack.requestSuccess(zhihuThemes)
+                zhihuCallBack.requestThemeSuccess(zhihuThemes)
             } else {
                 zhihuCallBack.requestFailed()
             }
@@ -81,7 +82,7 @@ class ZhihuRequest(private val zhihuCallBack: DataRequestCallBack) {
             val zhihuThemeNews = Gson().fromJson<ZhihuThemeNews>(zhihuResultStr, ZhihuThemeNews::class.java)
 
             if (zhihuThemeNews != null && zhihuThemeNews.stories.isNotEmpty()) {
-                zhihuCallBack.requestSuccess(zhihuThemeNews)
+                zhihuCallBack.requestTodayThemeNewsSuccess(zhihuThemeNews)
             } else {
                 zhihuCallBack.requestFailed()
             }
@@ -100,7 +101,7 @@ class ZhihuRequest(private val zhihuCallBack: DataRequestCallBack) {
             val zhihuThemeHistoryNews = Gson().fromJson<ZhihuThemeNews>(zhihuResultStr, ZhihuThemeNews::class.java)
 
             if (zhihuThemeHistoryNews != null && zhihuThemeHistoryNews.stories.isNotEmpty()) {
-                zhihuCallBack.requestSuccess(zhihuThemeHistoryNews)
+                zhihuCallBack.requestMoreThemeNewsSuccess(zhihuThemeHistoryNews)
             } else {
                 zhihuCallBack.requestFailed()
             }
@@ -118,7 +119,7 @@ class ZhihuRequest(private val zhihuCallBack: DataRequestCallBack) {
             val zhihuNewsBody = Gson().fromJson<ZhihuDetailEntity>(zhihuResultStr, ZhihuDetailEntity::class.java)
 
             if (zhihuNewsBody != null && zhihuNewsBody.body.isNotBlank()) {
-                zhihuCallBack.requestSuccess(zhihuNewsBody)
+                zhihuCallBack.requestNewsDetailSuccess(zhihuNewsBody)
             } else {
                 zhihuCallBack.requestFailed()
             }
