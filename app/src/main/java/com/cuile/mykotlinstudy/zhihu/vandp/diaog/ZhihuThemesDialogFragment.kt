@@ -45,7 +45,7 @@ class ZhihuThemesDialogFragment(private val themes: ZhihuThemes?, private val th
         mBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
 
-        zhihuThemesRecyclerView.layoutManager = GridLayoutManager(context,3)
+        zhihuThemesRecyclerView.layoutManager = GridLayoutManager(context,2)
         themeListAdapter = ZhihuThemesListAdapter(themes?.others?.toMutableList()!!) { theme: ThemeBody, view: View ->
             themeClicked(theme, view)
         }
