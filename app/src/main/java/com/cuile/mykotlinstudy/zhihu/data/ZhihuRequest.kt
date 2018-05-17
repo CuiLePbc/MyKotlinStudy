@@ -75,7 +75,7 @@ class ZhihuRequest(private val zhihuCallBack: ZhihuRequestCallBack) {
      * 获取某一主题的今日日报
      * @param themeId 主题ID
      */
-    fun getNewsByTheme(themeId: String) {
+    fun getNewsByTheme(themeId: Int) {
         val url = "$BASE_URL/theme/$themeId"
         async {
             val zhihuResultStr = URL(url).readText()

@@ -21,7 +21,7 @@ interface ZhihuContract {
     interface Presenter : BasePresenter {
         fun requestTodayHot()
         fun requestMoreHot(date: String)
-        fun requestTodayThemeNews(themeId: String)
+        fun requestTodayThemeNews(themeId: Int)
         fun requestMoreThemeNews(themeId: String, currentNewsId: String)
         fun requestNewsDetail(newsId: String)
 

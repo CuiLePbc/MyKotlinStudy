@@ -23,7 +23,7 @@ class ZhihuPresenter(private val zhihuView: ZhihuContract.View): ZhihuContract.P
         zhihuRequest.getNewsByDate(date)
     }
 
-    override fun requestTodayThemeNews(themeId: String) {
+    override fun requestTodayThemeNews(themeId: Int) {
         zhihuView.showLoadingBar()
         zhihuRequest.getNewsByTheme(themeId)
     }

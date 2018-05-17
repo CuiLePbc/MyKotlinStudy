@@ -4,6 +4,7 @@ package com.cuile.mykotlinstudy.zhihu.vandp
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.intfac.DataInterface
 import com.cuile.mykotlinstudy.intfac.OnFragmentInteractionListener
 import com.cuile.mykotlinstudy.zhihu.data.*
+import com.cuile.mykotlinstudy.zhihu.vandp.adapter.ZhiHuListAdapter
 import com.cuile.mykotlinstudy.zhihu.vandp.diaog.ZhihuThemesDialogFragment
 import com.cuile.mykotlinstudy.zhihu.vandp.diaog.ZhihuThemesDialogSelectedListener
 import kotlinx.android.synthetic.main.fragment_zhihu.*
@@ -24,6 +26,9 @@ import org.jetbrains.anko.longToast
  *
  */
 class ZhihuFragment : Fragment(), ZhihuContract.View, ZhihuThemesDialogSelectedListener {
+    private var currentThemeId: Int = -1
+
+    private val zhihuListAdapter: ZhiHuListAdapter = ZhiHuListAdapter()
     private var zhihuPresenter: ZhihuContract.Presenter
     init {
         zhihuPresenter = ZhihuPresenter(this)
@@ -55,7 +60,13 @@ class ZhihuFragment : Fragment(), ZhihuContract.View, ZhihuThemesDialogSelectedL
                 ZhihuThemesDialogFragment(themes,this).show(activity?.supportFragmentManager, "dialog")
         }
 
+        zhihu_data_list.layoutManager = LinearLayoutManager(activity)
+        zhihu_data_list.adapter = zhihuListAdapter
+
+        zhihu_swip_refresh.setOnRefreshListener { refreshDatas() }
+
         zhihuPresenter.requestThemesList()
+        zhihuPresenter.requestTodayHot()
     }
 
     override fun onAttach(context: Context) {
@@ -71,24 +82,38 @@ class ZhihuFragment : Fragment(), ZhihuContract.View, ZhihuThemesDialogSelectedL
         super.onDetach()
         listener = null
     }
+
+    private fun refreshDatas(){
+        zhihuListAdapter.clearAll()
+        if (currentThemeId == -1) {
+            zhihuPresenter.requestTodayHot()
+        } else {
+            zhihuPresenter.requestTodayThemeNews(currentThemeId)
+        }
+    }
     override fun themeSelected(theme: ThemeBody) {
-        activity?.longToast(theme.name)
+        zhihuListAdapter.clearAll()
+        currentThemeId = theme.id
+        zhihuPresenter.requestTodayThemeNews(currentThemeId)
+
+//        val headView = LayoutInflater.from(context).inflate(R.layout.item_zhihulist_head, null)
+//        zhihuListAdapter.setHeadView(headView)
     }
 
     override fun refreshTodayHot(zhihuLatestNews: ZhihuLatestNews) {
-
+        zhihuListAdapter.addDatas(ZhihuListItem.changeIntoThis(zhihuLatestNews.stories))
     }
 
     override fun refreshMoreHot(zhihuHistoryNews: ZhihuHistoryNews) {
-
+        zhihuListAdapter.addDatas(ZhihuListItem.changeIntoThis(zhihuHistoryNews.stories))
     }
 
     override fun refreshTodayThemeNews(zhihuThemeNews: ZhihuThemeNews) {
-
+        zhihuListAdapter.addDatas(ZhihuListItem.changeIntoThis(zhihuThemeNews.stories))
     }
 
     override fun refreshMoreThemeNews(zhihuThemeNews: ZhihuThemeNews) {
-
+        zhihuListAdapter.addDatas(ZhihuListItem.changeIntoThis(zhihuThemeNews.stories))
     }
 
     override fun refreshNewsDetail(zhihuDetailEntity: ZhihuDetailEntity) {
@@ -100,11 +125,11 @@ class ZhihuFragment : Fragment(), ZhihuContract.View, ZhihuThemesDialogSelectedL
     }
 
     override fun showLoadingBar() {
-
+        zhihu_swip_refresh.post { zhihu_swip_refresh.isRefreshing = true }
     }
 
     override fun hideLoadingBar() {
-
+        zhihu_swip_refresh.post { zhihu_swip_refresh.isRefreshing = false }
     }
 
     override fun isActive(): Boolean = isAdded

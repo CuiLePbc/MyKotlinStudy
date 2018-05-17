@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/list_item_spacing"
+    android:layout_marginBottom="@dimen/list_item_spacing"
+    app:cardElevation="@dimen/cardview_default_elevation"
+    app:cardCornerRadius="@dimen/cardview_default_radius"
+    app:contentPadding="@dimen/list_item_spacing"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?android:selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/item_zhihulist_title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="100dp"
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:text="this is title title titlethis is title title titlethis is title title title"/>
+
+        <ImageView
+            android:id="@+id/item_zhihulist_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/toutiao_default"/>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
