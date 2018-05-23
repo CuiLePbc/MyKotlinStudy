@@ -5,6 +5,7 @@ import com.cuile.mykotlinstudy.intfac.DataRequestCallBack
 import com.cuile.mykotlinstudy.zhihu.vandp.ZhihuRequestCallBack
 import com.google.gson.Gson
 import org.jetbrains.anko.async
+import org.jetbrains.anko.uiThread
 import java.net.URL
 
 /**
@@ -26,10 +27,12 @@ class ZhihuRequest(private val zhihuCallBack: ZhihuRequestCallBack) {
             val zhihuResultStr = URL(url).readText()
             val zhihuLatestNews = Gson().fromJson<ZhihuLatestNews>(zhihuResultStr, ZhihuLatestNews::class.java)
 
-            if (zhihuLatestNews != null && zhihuLatestNews.stories.isNotEmpty()) {
-                zhihuCallBack.requestTodayHotSuccess(zhihuLatestNews)
-            } else {
-                zhihuCallBack.requestFailed()
+            uiThread {
+                if (zhihuLatestNews != null && zhihuLatestNews.stories.isNotEmpty()) {
+                    zhihuCallBack.requestTodayHotSuccess(zhihuLatestNews)
+                } else {
+                    zhihuCallBack.requestFailed()
+                }
             }
         }
     }
@@ -46,10 +49,12 @@ class ZhihuRequest(private val zhihuCallBack: ZhihuRequestCallBack) {
             val zhihuResultStr = URL(url).readText()
             val zhihuHistoryNews = Gson().fromJson<ZhihuHistoryNews>(zhihuResultStr, ZhihuHistoryNews::class.java)
 
-            if (zhihuHistoryNews != null && zhihuHistoryNews.stories.isNotEmpty()) {
-                zhihuCallBack.requestMoreHotSuccess(zhihuHistoryNews)
-            } else {
-                zhihuCallBack.requestFailed()
+            uiThread {
+                if (zhihuHistoryNews != null && zhihuHistoryNews.stories.isNotEmpty()) {
+                    zhihuCallBack.requestMoreHotSuccess(zhihuHistoryNews)
+                } else {
+                    zhihuCallBack.requestFailed()
+                }
             }
         }
     }
@@ -63,10 +68,13 @@ class ZhihuRequest(private val zhihuCallBack: ZhihuRequestCallBack) {
             val zhihuResultStr = URL(url).readText()
             val zhihuThemes = Gson().fromJson<ZhihuThemes>(zhihuResultStr, ZhihuThemes::class.java)
             Log.i("GetThemes", zhihuThemes.toString())
-            if (zhihuThemes != null && zhihuThemes.others.isNotEmpty()) {
-                zhihuCallBack.requestThemeSuccess(zhihuThemes)
-            } else {
-                zhihuCallBack.requestFailed()
+
+            uiThread {
+                if (zhihuThemes != null && zhihuThemes.others.isNotEmpty()) {
+                    zhihuCallBack.requestThemeSuccess(zhihuThemes)
+                } else {
+                    zhihuCallBack.requestFailed()
+                }
             }
         }
     }
@@ -81,10 +89,12 @@ class ZhihuRequest(private val zhihuCallBack: ZhihuRequestCallBack) {
             val zhihuResultStr = URL(url).readText()
             val zhihuThemeNews = Gson().fromJson<ZhihuThemeNews>(zhihuResultStr, ZhihuThemeNews::class.java)
 
-            if (zhihuThemeNews != null && zhihuThemeNews.stories.isNotEmpty()) {
-                zhihuCallBack.requestTodayThemeNewsSuccess(zhihuThemeNews)
-            } else {
-                zhihuCallBack.requestFailed()
+            uiThread {
+                if (zhihuThemeNews != null && zhihuThemeNews.stories.isNotEmpty()) {
+                    zhihuCallBack.requestTodayThemeNewsSuccess(zhihuThemeNews)
+                } else {
+                    zhihuCallBack.requestFailed()
+                }
             }
         }
     }
@@ -100,10 +110,12 @@ class ZhihuRequest(private val zhihuCallBack: ZhihuRequestCallBack) {
             val zhihuResultStr = URL(url).readText()
             val zhihuThemeHistoryNews = Gson().fromJson<ZhihuThemeNews>(zhihuResultStr, ZhihuThemeNews::class.java)
 
-            if (zhihuThemeHistoryNews != null && zhihuThemeHistoryNews.stories.isNotEmpty()) {
-                zhihuCallBack.requestMoreThemeNewsSuccess(zhihuThemeHistoryNews)
-            } else {
-                zhihuCallBack.requestFailed()
+            uiThread {
+                if (zhihuThemeHistoryNews != null && zhihuThemeHistoryNews.stories.isNotEmpty()) {
+                    zhihuCallBack.requestMoreThemeNewsSuccess(zhihuThemeHistoryNews)
+                } else {
+                    zhihuCallBack.requestFailed()
+                }
             }
         }
     }
@@ -118,10 +130,12 @@ class ZhihuRequest(private val zhihuCallBack: ZhihuRequestCallBack) {
             val zhihuResultStr = URL(url).readText()
             val zhihuNewsBody = Gson().fromJson<ZhihuDetailEntity>(zhihuResultStr, ZhihuDetailEntity::class.java)
 
-            if (zhihuNewsBody != null && zhihuNewsBody.body.isNotBlank()) {
-                zhihuCallBack.requestNewsDetailSuccess(zhihuNewsBody)
-            } else {
-                zhihuCallBack.requestFailed()
+            uiThread {
+                if (zhihuNewsBody != null && zhihuNewsBody.body.isNotBlank()) {
+                    zhihuCallBack.requestNewsDetailSuccess(zhihuNewsBody)
+                } else {
+                    zhihuCallBack.requestFailed()
+                }
             }
         }
     }

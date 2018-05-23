@@ -7,8 +7,7 @@
         <item
             android:id="@+id/nav_toutiao"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/toutiao"
-            android:checked="true"/>
+            android:title="@string/toutiao"/>
         <item
             android:id="@+id/nav_wechat"
             android:icon="@drawable/ic_menu_gallery"
@@ -20,6 +19,7 @@
         <item
             android:id="@+id/nav_zhihu"
             android:icon="@drawable/ic_menu_gallery"
+            android:checked="true"
             android:title="@string/zhihu" />
 
     </group>

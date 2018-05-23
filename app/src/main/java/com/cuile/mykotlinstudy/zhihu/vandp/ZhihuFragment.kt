@@ -28,7 +28,10 @@ import org.jetbrains.anko.longToast
 class ZhihuFragment : Fragment(), ZhihuContract.View, ZhihuThemesDialogSelectedListener {
     private var currentThemeId: Int = -1
 
-    private val zhihuListAdapter: ZhiHuListAdapter = ZhiHuListAdapter()
+    private lateinit var zhihuListAdapter: ZhiHuListAdapter
+
+
+
     private var zhihuPresenter: ZhihuContract.Presenter
     init {
         zhihuPresenter = ZhihuPresenter(this)
@@ -60,6 +63,11 @@ class ZhihuFragment : Fragment(), ZhihuContract.View, ZhihuThemesDialogSelectedL
                 ZhihuThemesDialogFragment(themes,this).show(activity?.supportFragmentManager, "dialog")
         }
 
+        zhihuListAdapter = ZhiHuListAdapter{ zhihuListItem: ZhihuListItem, view: View ->
+            onZhihuItemClicked(zhihuListItem, view)
+        }
+
+        zhihu_data_list.setHasFixedSize(true)
         zhihu_data_list.layoutManager = LinearLayoutManager(activity)
         zhihu_data_list.adapter = zhihuListAdapter
 
@@ -81,6 +89,10 @@ class ZhihuFragment : Fragment(), ZhihuContract.View, ZhihuThemesDialogSelectedL
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    private fun onZhihuItemClicked(zhihuListItem: ZhihuListItem, view: View) {
+        listener?.onFragmentInteraction(zhihuListItem, view)
     }
 
     private fun refreshDatas(){

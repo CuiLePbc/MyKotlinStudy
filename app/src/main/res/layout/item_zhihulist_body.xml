@@ -33,6 +33,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="fitXY"
-            android:src="@drawable/toutiao_default"/>
+            android:src="@drawable/toutiao_default"
+            android:transitionName="@string/zhihu_share_img"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>

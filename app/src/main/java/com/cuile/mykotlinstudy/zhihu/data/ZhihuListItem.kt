@@ -1,7 +1,7 @@
 package com.cuile.mykotlinstudy.zhihu.data
 
 import android.util.Log
-import com.cuile.mykotlinstudy.intfac.DataInterface
+import com.cuile.mykotlinstudy.intfac.DataItemInterface
 
 /**
  * Created by cuile on 18-5-16.
@@ -14,7 +14,7 @@ data class ZhihuListItem(
         // 新闻ID
         val id: Int,
         // 新闻标题
-        val title: String){
+        val title: String) : DataItemInterface{
         companion object {
             fun changeIntoThis(data: Any): ZhihuListItem? {
                 when(data) {
@@ -25,6 +25,7 @@ data class ZhihuListItem(
                         return ZhihuListItem(data.image, data.type, data.id, data.title)
                     }
                     is ThemeStory -> {
+                        Log.i("theme story:", data.toString())
                         return ZhihuListItem(if (data.images.isEmpty()) "" else data.images[0], data.type, data.id, data.title)
                     }
                 }

@@ -1,6 +1,5 @@
 package com.cuile.mykotlinstudy.zhihu.vandp.adapter
 
-import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +15,11 @@ import org.jetbrains.anko.find
  * Created by cuile on 18-5-15.
  *
  */
-class ZhiHuListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ZhiHuListAdapter(private var items: MutableList<ZhihuListItem> = mutableListOf(), private val zhihuItemClickListener: (zhihuListItem: ZhihuListItem, view: View) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     enum class ITEM_TYPE { ITEM_TYPE_HEAD, ITEM_TYPE_BODY }
 
     private var headView: View? = null
-    private var items: MutableList<ZhihuListItem> = mutableListOf()
     /**
      * 设置头View
      */
@@ -30,8 +28,8 @@ class ZhiHuListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyItemInserted(0)
     }
 
-    fun addDatas(items: MutableList<ZhihuListItem>) {
-        this.items.addAll(items)
+    fun addDatas(datas: MutableList<ZhihuListItem>) {
+        items.addAll(datas)
         notifyDataSetChanged()
     }
 
@@ -40,7 +38,7 @@ class ZhiHuListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (headView != null && viewType == ITEM_TYPE.ITEM_TYPE_HEAD.ordinal) return ViewHolderHead(headView as View)
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_zhihulist_body, parent, false)
-        return ViewHolderItem(view)
+        return ViewHolderItem(view, zhihuItemClickListener)
     }
 
     override fun getItemCount(): Int = if (headView == null) items.size else items.size + 1
@@ -72,7 +70,7 @@ class ZhiHuListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class ViewHolderHead(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    class ViewHolderItem(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolderItem(itemView: View,private val zhihuItemClickListener: (zhihuListItem: ZhihuListItem, view: View) -> Unit) : RecyclerView.ViewHolder(itemView) {
         private val titleTV: TextView = itemView.find(R.id.item_zhihulist_title)
         private val imgIV: ImageView = itemView.find(R.id.item_zhihulist_img)
 
@@ -83,6 +81,7 @@ class ZhiHuListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         .load(image)
                         .centerCrop()
                         .into(imgIV)
+                itemView.setOnClickListener { zhihuItemClickListener(this, imgIV) }
             }
         }
     }

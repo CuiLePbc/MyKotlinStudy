@@ -21,6 +21,8 @@ import com.cuile.mykotlinstudy.wechat.vandp.WeChatDetailActivity
 import com.cuile.mykotlinstudy.wechat.vandp.WeChatFragment
 import com.cuile.mykotlinstudy.yike.data.YiKeInfoResultData
 import com.cuile.mykotlinstudy.yike.vandp.YiKeFragment
+import com.cuile.mykotlinstudy.zhihu.data.ZhihuListItem
+import com.cuile.mykotlinstudy.zhihu.vandp.ZhihuDetailActivity
 import com.cuile.mykotlinstudy.zhihu.vandp.ZhihuFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -49,6 +51,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(
                         intent,
                         ActivityOptions.makeSceneTransitionAnimation(this, view, getString(R.string.yike_share_img)).toBundle())
+            }
+            is ZhihuListItem -> {
+                val intent = Intent(this.applicationContext, ZhihuDetailActivity::class.java)
+                intent.putExtra(ZhihuDetailActivity.ITEM_ID, itemData.id.toString())
+                startActivity(
+                        intent,
+                        ActivityOptions.makeSceneTransitionAnimation(this, view, getString(R.string.zhihu_share_img)).toBundle()
+                )
             }
         }
     }
