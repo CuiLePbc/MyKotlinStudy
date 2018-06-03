@@ -2,39 +2,41 @@ package com.cuile.mykotlinstudy.zhihu.vandp
 
 import com.cuile.mykotlinstudy.intfac.DataInterface
 import com.cuile.mykotlinstudy.zhihu.data.*
+import java.lang.ref.WeakReference
 
 /**
  * Created by cuile on 18-4-13.
  *
  */
-class ZhihuPresenter(private val zhihuView: ZhihuContract.View): ZhihuContract.Presenter, ZhihuRequestCallBack {
+class ZhihuPresenter(zhihuViewParam: ZhihuContract.View): ZhihuContract.Presenter, ZhihuRequestCallBack {
     private val zhihuRequest = ZhihuRequest(this)
+    private val zhihuView = WeakReference<ZhihuContract.View>(zhihuViewParam)
     init {
-        zhihuView.setPresenter(this)
+        zhihuView.get()?.setPresenter(this)
     }
 
     override fun requestTodayHot() {
-        zhihuView.showLoadingBar()
+        zhihuView.get()?.showLoadingBar()
         zhihuRequest.getLatestNews()
     }
 
     override fun requestMoreHot(date: String) {
-        zhihuView.showLoadingBar()
+        zhihuView.get()?.showLoadingBar()
         zhihuRequest.getNewsByDate(date)
     }
 
     override fun requestTodayThemeNews(themeId: Int) {
-        zhihuView.showLoadingBar()
+        zhihuView.get()?.showLoadingBar()
         zhihuRequest.getNewsByTheme(themeId)
     }
 
     override fun requestMoreThemeNews(themeId: String, currentNewsId: String) {
-        zhihuView.showLoadingBar()
+        zhihuView.get()?.showLoadingBar()
         zhihuRequest.getNewsByThemeAndDate(themeId, currentNewsId)
     }
 
     override fun requestNewsDetail(newsId: String) {
-        zhihuView.showLoadingBar()
+        zhihuView.get()?.showLoadingBar()
         zhihuRequest.getNewsBody(newsId)
     }
 
@@ -43,7 +45,7 @@ class ZhihuPresenter(private val zhihuView: ZhihuContract.View): ZhihuContract.P
     }
 
     override fun requestThemeSuccess(zhihuThemes: ZhihuThemes) {
-        zhihuView.getThemesList(zhihuThemes)
+        zhihuView.get()?.getThemesList(zhihuThemes)
     }
 
     override fun requestSuccess(dataInfo: DataInterface) {
@@ -55,34 +57,34 @@ class ZhihuPresenter(private val zhihuView: ZhihuContract.View): ZhihuContract.P
     }
 
     override fun requestFailed() {
-        zhihuView.hideLoadingBar()
-        zhihuView.refreshFailed()
+        zhihuView.get()?.hideLoadingBar()
+        zhihuView.get()?.refreshFailed()
     }
 
 
     override fun requestTodayHotSuccess(zhihuLatestNews: ZhihuLatestNews) {
-        zhihuView.hideLoadingBar()
-        zhihuView.refreshTodayHot(zhihuLatestNews)
+        zhihuView.get()?.hideLoadingBar()
+        zhihuView.get()?.refreshTodayHot(zhihuLatestNews)
     }
 
     override fun requestMoreHotSuccess(zhihuHistoryNews: ZhihuHistoryNews) {
-        zhihuView.hideLoadingBar()
-        zhihuView.refreshMoreHot(zhihuHistoryNews)
+        zhihuView.get()?.hideLoadingBar()
+        zhihuView.get()?.refreshMoreHot(zhihuHistoryNews)
     }
 
     override fun requestTodayThemeNewsSuccess(zhihuThemeNews: ZhihuThemeNews) {
-        zhihuView.hideLoadingBar()
-        zhihuView.refreshTodayThemeNews(zhihuThemeNews)
+        zhihuView.get()?.hideLoadingBar()
+        zhihuView.get()?.refreshTodayThemeNews(zhihuThemeNews)
     }
 
     override fun requestMoreThemeNewsSuccess(zhihuThemeNews: ZhihuThemeNews) {
-        zhihuView.hideLoadingBar()
-        zhihuView.refreshMoreThemeNews(zhihuThemeNews)
+        zhihuView.get()?.hideLoadingBar()
+        zhihuView.get()?.refreshMoreThemeNews(zhihuThemeNews)
     }
 
     override fun requestNewsDetailSuccess(zhihuDetailEntity: ZhihuDetailEntity) {
-        zhihuView.hideLoadingBar()
-        zhihuView.refreshNewsDetail(zhihuDetailEntity)
+        zhihuView.get()?.hideLoadingBar()
+        zhihuView.get()?.refreshNewsDetail(zhihuDetailEntity)
     }
 
 }

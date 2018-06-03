@@ -85,7 +85,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun addToutiao() {
         title = getString(R.string.toutiao)
-        supportActionBar?.hide()
         // 初始化头条fragment
         toutiaoFragment = supportFragmentManager.findFragmentByTag(getString(R.string.tag_toutiao_fragment))
         if (toutiaoFragment == null) {
@@ -102,7 +101,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager.beginTransaction().replace(R.id.main_container, weChatFragment, getString(R.string.tag_wechat_fragment)).commit()
         }
         title = getString(R.string.wechat)
-        supportActionBar?.show()
     }
 
     fun addYiKe() {
@@ -112,7 +110,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager.beginTransaction().replace(R.id.main_container, yiKeFragment, getString(R.string.tag_yike_fragment)).commit()
         }
         title = getString(R.string.smile)
-        supportActionBar?.hide()
     }
 
     fun addZhihu() {
@@ -122,7 +119,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager.beginTransaction().replace(R.id.main_container, zhihuFragment, getString(R.string.tag_zhihu_fragment)).commit()
         }
         title = getString(R.string.zhihu)
-        supportActionBar?.hide()
     }
 
     override fun onBackPressed() {

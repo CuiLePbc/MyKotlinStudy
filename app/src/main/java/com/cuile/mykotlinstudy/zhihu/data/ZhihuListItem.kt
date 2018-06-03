@@ -16,7 +16,7 @@ data class ZhihuListItem(
         // 新闻标题
         val title: String) : DataItemInterface{
         companion object {
-            fun changeIntoThis(data: Any): ZhihuListItem? {
+            private fun changeIntoThis(data: Any): ZhihuListItem? {
                 when(data) {
                     is Story -> {
                         return ZhihuListItem(if (data.images.isEmpty()) "" else data.images[0], data.type, data.id, data.title)
@@ -26,7 +26,7 @@ data class ZhihuListItem(
                     }
                     is ThemeStory -> {
                         Log.i("theme story:", data.toString())
-                        return ZhihuListItem(if (data.images.isEmpty()) "" else data.images[0], data.type, data.id, data.title)
+                        return ZhihuListItem(if (data.images == null || data.images.isEmpty()) "" else data.images[0], data.type, data.id, data.title)
                     }
                 }
 

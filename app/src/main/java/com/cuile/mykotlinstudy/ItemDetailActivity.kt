@@ -19,30 +19,21 @@ open class ItemDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_detail)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        setSupportActionBar(detail_appbar)
+        detail_appbar.navigationIcon = getDrawable(R.drawable.ic_arrow_back_white_24dp)
+        detail_appbar.setNavigationOnClickListener { finish() }
 
         val itemUrl = intent.getStringExtra(ITEM_URL)
 
         detail_webview.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-
         detail_webview.settings.setSupportZoom(false)
         detail_webview.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
-
         detail_webview.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 view?.loadUrl(itemUrl)
                 return true
             }
-
-//            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-//                itemLoadDetailProgressBar.visibility = View.VISIBLE
-//                super.onPageStarted(view, url, favicon)
-//            }
-//
-//            override fun onPageFinished(view: WebView?, url: String?) {
-//                super.onPageFinished(view, url)
-//                itemLoadDetailProgressBar.visibility = View.INVISIBLE
-//            }
         }
         detail_webview.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
@@ -53,10 +44,9 @@ open class ItemDetailActivity : AppCompatActivity() {
 
             override fun onReceivedTitle(view: WebView?, t: String?) {
                 super.onReceivedTitle(view, t)
-                supportActionBar?.title = t
+                detail_appbar.title = t
             }
         }
-
         detail_webview.loadUrl(itemUrl)
 
     }

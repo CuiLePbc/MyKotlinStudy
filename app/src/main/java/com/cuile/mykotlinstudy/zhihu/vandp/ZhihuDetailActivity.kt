@@ -1,16 +1,21 @@
 package com.cuile.mykotlinstudy.zhihu.vandp
 
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.LevelListDrawable
-import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
-import android.text.Html
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.widget.ImageView
+import android.view.View
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.Request
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.SizeReadyCallback
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.transition.Transition
 import com.cuile.mykotlinstudy.GlideApp
 import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.intfac.DataInterface
@@ -18,10 +23,9 @@ import com.cuile.mykotlinstudy.zhihu.data.*
 import com.pixplicity.htmlcompat.HtmlCompat
 import kotlinx.android.synthetic.main.activity_zhihu_detail.*
 import org.jetbrains.anko.async
-import org.jetbrains.anko.find
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.uiThread
-import java.net.URL
+import java.io.InputStream
 
 class ZhihuDetailActivity : AppCompatActivity(), ZhihuContract.View {
     companion object {
@@ -33,6 +37,9 @@ class ZhihuDetailActivity : AppCompatActivity(), ZhihuContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_zhihu_detail)
+
+
+
         val newsId = intent.getStringExtra(ITEM_ID)
         setSupportActionBar(zhihu_detail_toolbar)
 
@@ -47,20 +54,39 @@ class ZhihuDetailActivity : AppCompatActivity(), ZhihuContract.View {
     }
 
     override fun refreshNewsDetail(zhihuDetailEntity: ZhihuDetailEntity) {
-        Log.i("zhihuDetail_img:", zhihuDetailEntity.image)
         zhihu_detail_toolbar_layout.title = zhihuDetailEntity.title
         zhihu_detail_content.text = HtmlCompat.fromHtml(
                 this,
-                zhihuDetailEntity.image,
-                HtmlCompat.FROM_HTML_MODE_LEGACY)
+                zhihuDetailEntity.body,
+                HtmlCompat.FROM_HTML_MODE_LEGACY,
+                { source, _ ->
+                    val img = LevelListDrawable()
+                    Glide.with(applicationContext)
+                            .asDrawable()
+                            .load(source)
+                            .into(object: SimpleTarget<Drawable>() {
+                                override fun onResourceReady(drawable: Drawable, transition: Transition<in Drawable>?) {
+                                    img.addLevel(1, 1, drawable)
+                                    img.level = 1
+
+                                    zhihu_detail_content.invalidate()
+                                    zhihu_detail_content.text = zhihu_detail_content.text
+                                }
+                            })
+                    img
+                }
+        )
 
 
-        GlideApp.with(this)
-                .load(zhihuDetailEntity.image)
-                .centerCrop()
-                .placeholder(R.drawable.toutiao_default)
-                .into(zhihu_detail_toolbar_img)
-
+        if (zhihuDetailEntity.image.isNullOrBlank() || zhihuDetailEntity.image.isEmpty()) {
+            zhihu_detail_toolbar_img.visibility = View.INVISIBLE
+        } else {
+            GlideApp.with(this)
+                    .load(zhihuDetailEntity.image)
+                    .placeholder(R.drawable.default_bg)
+                    .error(R.drawable.default_bg)
+                    .into(zhihu_detail_toolbar_img)
+        }
 
     }
     override fun refreshFailed() {

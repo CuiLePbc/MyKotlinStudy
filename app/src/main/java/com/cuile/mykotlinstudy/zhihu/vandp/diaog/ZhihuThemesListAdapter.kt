@@ -1,5 +1,6 @@
 package com.cuile.mykotlinstudy.zhihu.vandp.diaog
 
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
+import com.cuile.mykotlinstudy.GlideApp
 import com.cuile.mykotlinstudy.R
 import com.cuile.mykotlinstudy.zhihu.data.ThemeBody
 import com.cuile.mykotlinstudy.zhihu.data.ZhihuThemes
@@ -38,10 +41,12 @@ class ZhihuThemesListAdapter(private var datas: MutableList<ThemeBody> = mutable
         fun bind(themeBody: ThemeBody) {
             with(themeBody) {
                 titleTheme.text = name
-                Glide.with(itemView)
+                GlideApp.with(itemView)
                         .asDrawable()
                         .load(thumbnail)
+                        .error(R.drawable.toutiao_default)
                         .into(imageTheme)
+
                 itemView.setOnClickListener { zhihuThemeClickListener(this, itemView) }
             }
         }
